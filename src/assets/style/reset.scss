@@ -1,0 +1,58 @@
+/*
+* @Author: liyue2018
+* @Date:   2018-06-22 15:03:55
+* @Last Modified by:   liyue2018
+* @Last Modified time: 2018-06-28 16:36:07
+*/
+
+// 重置浏览器设置
+
+* {
+    box-sizing: border-box;
+}
+
+body, html, header, nav, footer, form, div, p, ul, li, dl, dt, dd, ol, a, input,button, span, img, h1,h2,h3,h4,h5,h6,i, em {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: PingFang SC, Helvetica Neue, Helvetica, Arial, Hiragino Sans GB, Microsoft Yahei, \\5FAE\8F6F\96C5\9ED1, STHeiti, \\534E\6587\7EC6\9ED1, sans-serif;
+    color: #666;
+    font-size: 14px;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-size: 100%; 
+    font-weight: normal;
+}
+
+li {
+    list-style-type: none;
+}
+
+input, button {
+    border: none;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+img {
+    border: none;
+    // 去基线
+    display: block;
+    vertical-align: middle;
+}
+
+img[src=""] {
+    opacity: 0;
+}
+a {
+    text-decoration: none;
+}
+
+i, em {
+    font-style: normal;
+}
+

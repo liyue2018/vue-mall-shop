@@ -1,0 +1,6 @@
+[
+    { "id": 1, "username": "朝阳群众", "detailAddress": "北京市朝阳区", "tel": "12345678900" },
+    { "id": 2, "username": "人民群众", "detailAddress": "北京市顺义区", "tel": "99945678900" },
+    { "id": 3, "username": "热心群众", "detailAddress": "北京市通州区", "tel": "88845678900" },
+    { "id": 4, "username": "哈哈群众", "detailAddress": "北京市大兴区", "tel": "88845678977" }
+]

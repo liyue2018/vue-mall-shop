@@ -1,0 +1,42 @@
+/*
+* @Author: liyue2018
+* @Date:   2018-06-22 15:04:05
+* @Last Modified by:   liyue2018
+* @Last Modified time: 2018-06-26 15:33:26
+*/
+
+.w {
+    width: 1220px;
+    margin: 0 auto;
+}
+
+.fl {
+    float: left;
+}
+
+.fr {
+    float: right;
+}
+
+.pa {
+    position: absolute;
+}
+
+.pr {
+    position: relative;
+}
+
+.clearfix:after, .clearfix:before {
+    content: '';
+    dispaly: block;
+    height: 0;
+    line-height: 0;
+    font-size: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+.clearfix {
+    *zoom: 1;
+}
+
