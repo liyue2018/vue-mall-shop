@@ -7,9 +7,9 @@
         <h2 class="money">1.00</h2>
         <div class="alipay-img">
             <div class="code-img">
-                <img src="/static/images/ali.jpeg" alt="">
+                <img src="static/images/ali.jpeg" alt="">
                 <div class="qr-img">
-                    <img src="/static/images/qr.png" alt="">
+                    <img src="static/images/qr.png" alt="">
                     <span>打开支付宝</span>
                     <span>扫一扫付款</span>
                 </div>

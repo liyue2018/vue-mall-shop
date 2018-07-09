@@ -2,7 +2,7 @@
 * @Author: yongze-chen
 * @Date:   2018-06-20 10:56:57
 * @Last Modified by:   liyue2018
-* @Last Modified time: 2018-07-08 17:50:56
+* @Last Modified time: 2018-07-09 15:39:56
 */
 
 import Vue from 'vue'
@@ -56,42 +56,6 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 import store from './store/vuex.js'
-
-// var store = new Vuex.Store({
-//     state: {
-//         car: []
-//     },
-//     mutations: {
-    
-//         addToCar(state, goodsinfo) {
-//             var flag = false;
-
-//             state.car.some(item => {
-//                 if (item.id == goodsinfo.id) {
-//                     item.count += parseInt(goodsinfo.count);
-//                     flag = true;
-//                     return true;
-//                 }
-//             })
-
-//             if (!flag) {
-//                 state.car.push(goodsinfo);
-//             }
-//         }
-//     },
-//     getters: {
-//         // 只负责对外提供数据，不负责修改数据 类似于过滤器，计算属性，对元素进行包装
-
-//        getAllCount(state) {
-//             var c = 0; 
-//             state.car.forEach(item => {
-//                 c += item.count;
-//             })
-//             return c;
-
-//        }
-//     }
-// });
 
 var vm = new Vue({
     el: '#app',

@@ -4,19 +4,19 @@
             <div class="img-box">
                 <ul class="small-img" ref="imgList">
                     <li class="item on">
-                        <img src="/static/images/product-detail01.jpg" alt="">
+                        <img src="static/images/product-detail01.jpg" alt="">
                     </li>
                     <li class="item">
-                        <img src="/static/images/product-detail02.jpg" alt="">
+                        <img src="static/images/product-detail02.jpg" alt="">
                     </li>
                     <li class="item">
-                        <img src="/static/images/product-detail03.jpg" alt="">
+                        <img src="static/images/product-detail03.jpg" alt="">
                     </li>
                     <li class="item">
-                        <img src="/static/images/product-detail04.jpg" alt="">
+                        <img src="static/images/product-detail04.jpg" alt="">
                     </li>
                     <li class="item">
-                        <img src="/static/images/product-detail05.jpg" alt="">
+                        <img src="static/images/product-detail05.jpg" alt="">
                     </li>
                 </ul>
                 <div class="big-img">
@@ -68,7 +68,7 @@
         data: function () {
             return {
                 bigImgUrl: '',
-                detailImgUrl: '/static/images/big-product-detail01.jpg',
+                detailImgUrl: 'static/images/big-product-detail01.jpg',
                 product:'',
                 ballFlag: false,
                 buyNum: 1

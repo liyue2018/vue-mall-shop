@@ -5,13 +5,13 @@
         <p class="tips">我们不会在您完成支付后的 72 小时内发货，所以不要支付了</p>
         <div class="payment-way">
             <a href="javascript:;" class="active" @click="onSelected">
-              <img src="/static/images/alipay.png" alt="支付宝支付" />
+              <img src="static/images/alipay.png" alt="支付宝支付" />
             </a>
             <a href="javascript:;">
-              <img src="/static/images/qqpay.png" alt="qq支付" />
+              <img src="static/images/qqpay.png" alt="qq支付" />
             </a>
             <a href="javascript:;">
-              <img src="/static/images/weixinpay.png" alt="微信支付" />
+              <img src="static/images/weixinpay.png" alt="微信支付" />
             </a>
            <!-- <router-link to="/order/alipay" class="active">
                <img src="/static/images/alipay.png" alt="">

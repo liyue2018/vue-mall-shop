@@ -26,28 +26,28 @@
          <!-- 为您推荐开始 -->
         <div v-show="!showFlag" class="w">
             <div class="no-product">
-                <img src="/assets/images/no-search.png" alt="">
+                <img src="static/images/no-search.png" alt="">
                 <h3>抱歉！没有为您找到相关的商品</h3>
             </div>
             <panel :title="recommendtitle">
                 <ul slot="content" class="product-nav">
                     <li class="item">
-                        <img src="/static/images/product-nav01.jpg" alt="">
+                        <img src="static/images/product-nav01.jpg" alt="">
                         <a href="#">
                         </a>
                     </li>
                     <li class="item">
-                        <img src="/static/images/product-nav02.jpg" alt="">
+                        <img src="static/images/product-nav02.jpg" alt="">
                         <a href="#">
                         </a>
                     </li>
                     <li class="item">
-                        <img src="/static/images/product-nav03.png" alt="">
+                        <img src="static/images/product-nav03.png" alt="">
                         <a href="#">
                         </a>
                     </li>
                     <li class="item">
-                        <img src="/static/images/product-nav04.jpg" alt="">
+                        <img src="static/images/product-nav04.jpg" alt="">
                         <a href="#">
                         </a>
                     </li>

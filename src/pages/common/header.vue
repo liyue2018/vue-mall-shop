@@ -82,7 +82,7 @@
                                 </div>
                             </div>
                             <div v-show="$store.getters.getAllCount == 0" class="empty-cart">
-                                <img src="/static/images/cart-empty-new.png" alt="">
+                                <img src="static/images/cart-empty-new.png" alt="">
                                 <p>您的购物车竟然是空的</p>
                             </div>
                         </div>

@@ -2,7 +2,7 @@
     <panel :title="replaceTitle">
         <div slot="content" class="replace-content">
             <div class="">
-                 <img src="/static/images/smile.png" alt="">
+                 <img src="static/images/smile.png" alt="">
                 <h2 class="tips">请问您拿什么和我换新</h2>
             </div>
         </div>

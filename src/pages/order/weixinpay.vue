@@ -1,16 +1,16 @@
 <template>
     <div class="wechat">
         <h1 class="title">
-            <img src="/static/images/weixinpay.png" alt="">
+            <img src="static/images/weixinpay.png" alt="">
         </h1>
         <p>扫一扫千万 <strong>别</strong> 付钱啊</p>
         <h2 class="money">1.00</h2>
         <div class="wechat-img">
             <div class="code-img">
-                <img src="/static/images/weichat.png" alt="微信">
+                <img src="static/images/weichat.png" alt="微信">
             </div>
             <div class="explain-img">
-                <img src="/static/images/wechat-explain.png" alt="">
+                <img src="static/images/wechat-explain.png" alt="">
             </div>
         </div>
         <countdown @time-end="message = '倒计时结束'" :endTime="endTime"></countdown>

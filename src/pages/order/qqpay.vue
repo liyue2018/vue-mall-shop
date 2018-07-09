@@ -1,15 +1,15 @@
 <template>
     <div class="qq">
         <h1 class="title">
-            <img src="/static/images/qqpay.png" alt="">
+            <img src="static/images/qqpay.png" alt="">
         </h1>
         <p>扫一扫千万 <strong>别</strong> 付钱啊</p>
         <h2 class="money">1.00</h2>
         <div class="qq-img">
             <div class="code-img">
-                <img src="/static/images/qq.png" alt="">
+                <img src="static/images/qq.png" alt="">
                 <div class="qr-img">
-                    <img src="/static/images/qr.png" alt="">
+                    <img src="static/images/qr.png" alt="">
                     <span>打开手机QQ</span>
                     <span>扫一扫付款</span>
                 </div>

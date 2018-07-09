@@ -6,12 +6,12 @@
                 <div class="swiper-container">
                     <div class="swiper-item">
                         <a href="#">
-                            <img src="/static/images/banner01.jpeg" alt="">
+                            <img src="static/images/banner01.jpeg" alt="">
                         </a>
                     </div>
                     <div class="swiper-item">
                         <a href="#">
-                            <img src="/static/images/banner02.png" alt="">
+                            <img src="static/images/banner02.png" alt="">
                         </a>
                     </div>
                 </div>
@@ -31,22 +31,22 @@
             <!-- 商品导航开始 -->
             <ul class="product-nav">
                 <li class="item">
-                    <img src="/static/images/product-nav01.jpg" alt="">
+                    <img src="static/images/product-nav01.jpg" alt="">
                     <a href="#">
                     </a>
                 </li>
                 <li class="item">
-                    <img src="/static/images/product-nav02.jpg" alt="">
+                    <img src="static/images/product-nav02.jpg" alt="">
                     <a href="#">
                     </a>
                 </li>
                 <li class="item">
-                    <img src="/static/images/product-nav03.png" alt="">
+                    <img src="static/images/product-nav03.png" alt="">
                     <a href="#">
                     </a>
                 </li>
                 <li class="item">
-                    <img src="/static/images/product-nav04.jpg" alt="">
+                    <img src="static/images/product-nav04.jpg" alt="">
                     <a href="#">
                     </a>
                 </li>
@@ -99,22 +99,22 @@
             <!-- 商品导航开始 -->
             <ul class="product-nav">
                 <li class="item">
-                    <img src="/static/images/product-nav01.jpg" alt="">
+                    <img src="static/images/product-nav01.jpg" alt="">
                     <a href="#">
                     </a>
                 </li>
                 <li class="item">
-                    <img src="/static/images/product-nav02.jpg" alt="">
+                    <img src="static/images/product-nav02.jpg" alt="">
                     <a href="#">
                     </a>
                 </li>
                 <li class="item">
-                    <img src="/static/images/product-nav03.png" alt="">
+                    <img src="static/images/product-nav03.png" alt="">
                     <a href="#">
                     </a>
                 </li>
                 <li class="item">
-                    <img src="/static/images/product-nav04.jpg" alt="">
+                    <img src="static/images/product-nav04.jpg" alt="">
                     <a href="#">
                     </a>
                 </li>
@@ -140,11 +140,11 @@ var count = 0;
                 timerId: null,
                 hotP: [],
                 choiceP: [],
-                choiceImg: '/static/images/choice.jpg',
+                choiceImg: 'static/images/choice.jpg',
                 brandP: [],
-                brandImg: '/static/images/brand01.jpg', 
+                brandImg: 'static/images/brand01.jpg', 
                 wellChosenP: [],
-                wellChosenImg: '/static/images/brand02.jpg',
+                wellChosenImg: 'static/images/brand02.jpg',
                 hotTitle: '热门商品',
                 choiceTitle: '官方精选',
                 brandTitle: '品牌周边',
@@ -193,16 +193,31 @@ var count = 0;
             // 获取首页商品的数据
 
             getProductData() {
-                this.$http.get('../../../static/js/productData.json').then((res) => {
-                    var products = res.body;
-                    this.hotP = products.slice(0,4);
-                    this.choiceP = products.slice(4,10);
-                    console.log(this.choiceP);
-                    this.brandP = products.slice(10,16);
-                    this.wellChosenP = products.slice(16, 22);
-                }, err => {
-                    console.log(err)
-                });
+
+                var products = require('../../../static/js/productData.json');
+                this.hotP = products.slice(0,4);
+                this.choiceP = products.slice(4,10);
+                this.brandP = products.slice(10,16);
+                this.wellChosenP = products.slice(16, 22);
+                
+                // this.$http.get('../../../static/js/productData.json').then((res) => {
+                // this.$http.get('http://localhost:8080/api/products').then((res) => {
+                // this.$http.get('/api/products').then((res) => {
+                //     var products = res.body;
+                //     this.hotP = products.slice(0,4);
+                //     this.choiceP = products.slice(4,10);
+                //     // console.log(this.choiceP);
+                //     this.brandP = products.slice(10,16);
+                //     this.wellChosenP = products.slice(16, 22);
+                // }, err => {
+                //     console.log(err)
+                // });
+
+                // this.$axios.get('/api/products').then(function(response){
+                //     console.log(response)
+                // }).catch(function(error){
+                //     console.log(error)
+                // })
             }
 
         },

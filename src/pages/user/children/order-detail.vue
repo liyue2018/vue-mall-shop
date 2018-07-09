@@ -43,7 +43,7 @@
                     <div class="list-content">
                         <div class="l-box">
                             <span class="goods-img">
-                                <img src="/static/images/product01.png" alt="" />
+                                <img src="static/images/product01.png" alt="" />
                             </span>
                             <span class="order-id">捐赠商品</span>
                             <div class="fr">

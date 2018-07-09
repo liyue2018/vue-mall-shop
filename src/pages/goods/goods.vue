@@ -34,11 +34,13 @@ import product from '../components/product.vue';
             // 获取商品数据
 
             getAllGoods() {
-                this.$http.get('../../../static/js/productData.json').then((res) => {
-                    this.goodsList = res.body;
-                }, err => {
-                    console.log(err)
-                })
+
+                this.goodsList = require('../../../static/js/productData.json');
+                // this.$http.get('../../../static/js/productData.json').then((res) => {
+                //     this.goodsList = res.body;
+                // }, err => {
+                //     console.log(err)
+                // })
             }
         },
         components: {

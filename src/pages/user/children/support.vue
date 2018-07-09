@@ -2,7 +2,7 @@
     <panel :title="supportTitle">
         <div slot="content" class="support-content">
             <div class="">
-                <img src="/static/images/support.png" alt="">
+                <img src="static/images/support.png" alt="">
                 <h2 class="tips">如有疑问请联系邮箱 1059869380@qq.com</h2>
             </div>
         </div>
