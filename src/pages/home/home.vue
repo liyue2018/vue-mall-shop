@@ -4,14 +4,9 @@
             <!-- 轮播图开始 -->
             <div class="swiper" @mouseenter='stop' @mouseleave='start'>
                 <div class="swiper-container">
-                    <div class="swiper-item">
+                    <div class="swiper-item" v-for="(item, index) in bannerList" :key="index">
                         <a href="#">
-                            <img src="static/images/banner01.jpeg" alt="">
-                        </a>
-                    </div>
-                    <div class="swiper-item">
-                        <a href="#">
-                            <img src="static/images/banner02.png" alt="">
+                            <img :src="item.img" alt="">
                         </a>
                     </div>
                 </div>
@@ -30,24 +25,9 @@
 
             <!-- 商品导航开始 -->
             <ul class="product-nav">
-                <li class="item">
-                    <img src="static/images/product-nav01.jpg" alt="">
-                    <a href="#">
-                    </a>
-                </li>
-                <li class="item">
-                    <img src="static/images/product-nav02.jpg" alt="">
-                    <a href="#">
-                    </a>
-                </li>
-                <li class="item">
-                    <img src="static/images/product-nav03.png" alt="">
-                    <a href="#">
-                    </a>
-                </li>
-                <li class="item">
-                    <img src="static/images/product-nav04.jpg" alt="">
-                    <a href="#">
+                <li class="item" v-for="(item, i) in navList" :key="i">
+                    <img :src="item.img" alt="">
+                    <a :href="item.url">
                     </a>
                 </li>
             </ul>
@@ -98,24 +78,9 @@
             <!-- 品牌精选结束 -->
             <!-- 商品导航开始 -->
             <ul class="product-nav">
-                <li class="item">
-                    <img src="static/images/product-nav01.jpg" alt="">
-                    <a href="#">
-                    </a>
-                </li>
-                <li class="item">
-                    <img src="static/images/product-nav02.jpg" alt="">
-                    <a href="#">
-                    </a>
-                </li>
-                <li class="item">
-                    <img src="static/images/product-nav03.png" alt="">
-                    <a href="#">
-                    </a>
-                </li>
-                <li class="item">
-                    <img src="static/images/product-nav04.jpg" alt="">
-                    <a href="#">
+                <li class="item" v-for="(item, i) in navList" :key="i">
+                    <img :src="item.img" alt="">
+                    <a :href="item.url">
                     </a>
                 </li>
             </ul>
@@ -131,6 +96,8 @@ import panel from '../components/panel.vue'
 import product from '../components/product.vue'
 
 import $ from 'jquery';
+
+import '../../mock/banner-mock.js'
 
 var count = 0;
 
@@ -148,13 +115,17 @@ var count = 0;
                 hotTitle: '热门商品',
                 choiceTitle: '官方精选',
                 brandTitle: '品牌周边',
-                wellChosenTitle: '品牌精选'
+                wellChosenTitle: '品牌精选',
+                bannerList:[],
+                navList: []
 
             }
         },
         created() {
             // 获取首页商品的数据
-            this.getProductData();
+            this.getProductData()
+            this.getBannerImg()
+            this.getNavImg ()
         },
         mounted () {
             var count = 0;
@@ -192,34 +163,43 @@ var count = 0;
 
             // 获取首页商品的数据
 
-            getProductData() {
+            getProductData () {
+                var that = this
+                // axios请求
+                this.$axios.get('/products').then(function (res) {
+                    console.log('连接成功')
+                    var products = res.data.data 
+                    that.hotP = products.slice(0,4);
+                    that.choiceP = products.slice(4,10);
+                    that.brandP = products.slice(10,16);
+                    that.wellChosenP = products.slice(16, 22);
+                })
+                .catch(function (err) {
+                    conosle.log('连接失败' + err)
+                })
+            },
+            // 获取轮播图
 
-                var products = require('../../../static/js/productData.json');
-                this.hotP = products.slice(0,4);
-                this.choiceP = products.slice(4,10);
-                this.brandP = products.slice(10,16);
-                this.wellChosenP = products.slice(16, 22);
-                
-                // this.$http.get('../../../static/js/productData.json').then((res) => {
-                // this.$http.get('http://localhost:8080/api/products').then((res) => {
-                // this.$http.get('/api/products').then((res) => {
-                //     var products = res.body;
-                //     this.hotP = products.slice(0,4);
-                //     this.choiceP = products.slice(4,10);
-                //     // console.log(this.choiceP);
-                //     this.brandP = products.slice(10,16);
-                //     this.wellChosenP = products.slice(16, 22);
-                // }, err => {
-                //     console.log(err)
-                // });
+            getBannerImg () {
+                var that = this
+                this.$axios.get('/bannerImg').then(function (res) {
+                    console.log('success')
+                    that.bannerList = res.data.data
+                }).catch(function (err) {
+                    console.log('error' + err)
+                })
+            },
+            //获取商品导航的图片
 
-                // this.$axios.get('/api/products').then(function(response){
-                //     console.log(response)
-                // }).catch(function(error){
-                //     console.log(error)
-                // })
+            getNavImg () {
+                var that = this 
+                this.$axios.get('/navImg').then(function (res) {
+                    console.log('success')
+                    that.navList = res.data.data
+                }).catch(function (err) {
+                    console.log('error' + err)
+                })
             }
-
         },
         components: {
             product,

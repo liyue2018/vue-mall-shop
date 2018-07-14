@@ -41,7 +41,6 @@ var router = new VueRouter({
         { path: '/register', component: Register},
         { path: '/cart', component: Cart},
         { path: '/checkout', component: Checkout},
-        // { path: '/search', component: Search },
         { 
             path: '/user', 
             component: User,

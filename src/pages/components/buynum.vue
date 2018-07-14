@@ -76,7 +76,7 @@
             display: inline-block;
             line-height: 0.8; 
             border-radius: 50%;
-            // box-shadow: 1px 1px 14px 1px rgba(0, 0, 0, 0.2);
+            box-shadow: 1px 1px 14px 1px rgba(0, 0, 0, 0.2);
             color: rgba(0,0,0,.7);
             font-size: 18px;
         }

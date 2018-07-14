@@ -2,12 +2,16 @@
 * @Author: yongze-chen
 * @Date:   2018-06-20 10:56:57
 * @Last Modified by:   liyue2018
-* @Last Modified time: 2018-07-09 15:39:56
+* @Last Modified time: 2018-07-12 16:13:06
 */
 
 import Vue from 'vue'
 
 import $ from 'jquery'
+
+import axios from 'axios'
+
+Vue.prototype.$axios = axios
 
 import VueRouter from 'vue-router'
 
@@ -41,7 +45,7 @@ Vue.use(VueResource)
 import VueLazyLoad from 'vue-lazyload'
 
 Vue.use(VueLazyLoad, {
-    loading: '/assets/images/load.gif'
+    loading: 'static/images/load.gif'
 })
 
 import router from './router/router.js'
@@ -56,6 +60,9 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 import store from './store/vuex.js'
+
+// 导入 product-mock.js 
+import './mock/product-mock.js'
 
 var vm = new Vue({
     el: '#app',

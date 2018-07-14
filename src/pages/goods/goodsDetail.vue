@@ -54,7 +54,7 @@
         <div class="item-info">
             <h4 class="title">产品信息</h4>
             <div class="product-detail-img">
-                <img src="" v-lazy="detailImgUrl" alt="">
+                <img src="" v-lazy="product.productDetailImg" alt="">
             </div>
         </div>
     </div>
@@ -68,7 +68,6 @@
         data: function () {
             return {
                 bigImgUrl: '',
-                detailImgUrl: 'static/images/big-product-detail01.jpg',
                 product:'',
                 ballFlag: false,
                 buyNum: 1

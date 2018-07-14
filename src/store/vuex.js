@@ -2,7 +2,7 @@
 * @Author: liyue2018
 * @Date:   2018-07-02 19:06:13
 * @Last Modified by:   liyue2018
-* @Last Modified time: 2018-07-04 23:46:45
+* @Last Modified time: 2018-07-14 15:50:15
 */
 
 // 使用 vuex
@@ -13,14 +13,16 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-var car = JSON.parse(localStorage.getItem('car') || '[]');
+var car = JSON.parse(localStorage.getItem('car') || '[]')
+var keywords = localStorage.getItem('keywords') || ''
 
 // var user = {};
 
 var store = new Vuex.Store({
     state: {
-        car: car
-        // user: ''
+        car: car,
+        keywords: keywords
+        // searchResultList: []
     },
     mutations: {
     
@@ -76,6 +78,11 @@ var store = new Vuex.Store({
             });
 
             localStorage.setItem('car', JSON.stringify(state.car));
+        },
+        // 得到搜索页面地址栏中的关键字
+
+        getSearchKeywords (state, keywords) {
+            state.keywords = keywords
         }
     },
     getters: {
@@ -103,6 +110,8 @@ var store = new Vuex.Store({
         var totalAmount = 0;
             state.car.forEach(item => {
                 totalAmount += item.productPrice * item.count
+                // 保留两位小数
+                totalAmount = Math.floor(totalAmount * 100) / 100
             });
             return totalAmount;
        },
@@ -118,6 +127,7 @@ var store = new Vuex.Store({
                 if (item.selected) {
                     selectedGoods.count += item.count;
                     selectedGoods.amount += item.count * item.productPrice;
+                    selectedGoods.amount = Math.floor(selectedGoods.amount * 100) / 100
                     return true;
                 }
             })
@@ -134,7 +144,13 @@ var store = new Vuex.Store({
                 }
             });
             return s;
-        }
+        },
+
+        // keywords 在刷新页面后，被赋值为本地存储中最近的值
+
+        // setKeywords (state) {
+        //     state.keywords = localStorage.getItem('keywords')
+        // }
 
     }
 });

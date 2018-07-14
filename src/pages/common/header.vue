@@ -7,15 +7,12 @@
             </div>
             <div class="search-box fr">
                 <div class="search-form">
-                    <label><input type="text" name="search" value="" placeholder="请输入商品信息" v-model="keywords" @keyup.enter="setkeywords(keywords)"></label>
+                    <label><input type="text" name="search" value="" placeholder="请输入商品信息" v-model="keywords" @keyup.enter="setkeywords()" @blur="resetInput"></label>
                     <router-link :to="{ path:'/search',query:{key: keywords}}"><span class="iconfont icon-search"></span></router-link>
                 </div>
                 <ul class="nav-list fl">
                     <li>
                         <router-link to="/goods">全部商品</router-link>
-                    </li>
-                    <li>
-                        <a href="#">捐赠</a>
                     </li>
                 </ul>
                 <div class="cart-box">
@@ -96,8 +93,7 @@
             <ul class="nav-list w">
                 <li><router-link to="/home">首页</router-link></li>
                 <li><router-link to="/goods">全部商品</router-link></li>
-                <li><a href="javascript:;">品牌周边</a></li>
-                <li><a href="javascript:;">GitHub</a></li>
+                <li><a href="https://github.com/liyue2018/vue-mall-shop">GitHub</a></li>
             </ul>
         </nav>
         <!-- 顶部导航结束 -->
@@ -145,8 +141,12 @@
                     }
                 })
             },
-            setkeywords(keywords) {
-                location.href = '/#/search?key=' + keywords;
+            setkeywords() {
+                location.href = '/#/search?key=' + this.keywords;
+                // 保存至本地存储中
+                localStorage.setItem('keywords', this.keywords)
+                // 保存至仓库中
+                this.$store.commit('getSearchKeywords', this.keywords)
             },
 
             showUserCard() {
@@ -158,21 +158,18 @@
                     this.userCardFlag = !this.userCardFlag;
                 }
             },
-
             // 删除购物车卡片里的商品
-
             delGoods(id, i) {
-                // 删除卡片中商品信息
-
                 // 删除car中的商品信息
                 this.$store.commit('removeFormCar', id);
+            },
+            // 失去焦点时，重置搜索栏
+            resetInput () {
+                this.keywords = ''
             }
         }
-        // props: ['flag']
     }
 </script>
-
-
 <style scoped lang="scss" rel="stylesheet/scss">
     .header-container {
         width: 100%;

@@ -7,7 +7,7 @@
 
         </div>
         <!-- 排序开始 -->
-        <div class="sort-box w">
+        <!-- <div class="sort-box w">
             <a href="javascript:;" class="active">综合排序</a>
             <a href="javascript:;">价格从低到高</a>
             <a href="javascript:;">价格从高到低</a>
@@ -17,8 +17,15 @@
                 <input type="text" name="max-price" class="price" placeholder="价格" />
                 <button type="button" class="sure-btn">确定</button>
             </div>
-        </div>
+        </div> -->
         <!-- 排序结束 -->
+
+        <!-- 进入搜索页面时 -->
+        <div class="loading" v-show="isLoad">
+            <img src="static/images/error.png" alt="">
+            <h3>正在努力加载中...</h3>
+        </div>
+        <!-- 搜索结果 -->
         <div class="goods w" v-show="showFlag">
             <product :product='goodsList'></product>
         </div>
@@ -31,31 +38,15 @@
             </div>
             <panel :title="recommendtitle">
                 <ul slot="content" class="product-nav">
-                    <li class="item">
-                        <img src="static/images/product-nav01.jpg" alt="">
-                        <a href="#">
-                        </a>
-                    </li>
-                    <li class="item">
-                        <img src="static/images/product-nav02.jpg" alt="">
-                        <a href="#">
-                        </a>
-                    </li>
-                    <li class="item">
-                        <img src="static/images/product-nav03.png" alt="">
-                        <a href="#">
-                        </a>
-                    </li>
-                    <li class="item">
-                        <img src="static/images/product-nav04.jpg" alt="">
-                        <a href="#">
+                    <li class="item" v-for="(item, index) in navList" :key="index">
+                        <img :src="item.img" alt="">
+                        <a :href="item.url">
                         </a>
                     </li>
                 </ul>
             </panel>
         </div>
         <!-- 为您推荐结束 -->
-
     </div>
 </template>
 
@@ -68,54 +59,127 @@ import panel from '../components/panel.vue'
         data: function() {
             return {
                 goodsList: [],
-                keywords: '',
+                // keywords: '',
                 productLength: 0,
                 showFlag: true,
-                recommendtitle: "为您推荐"
+                recommendtitle: "为您推荐",
+                navList: [],
+                isLoad: false
+            }
+        },
+        filters: {
+        },
+        computed: {
+            resultGoodsList: function () {
+                return this.$store.state.keywords
+            }
+        },
+        watch: {
+            resultGoodsList (newValue, oldValue) {
+                var that = this
+                this.$axios.get('/products').then(function (res) {
+                    console.log('success')
+                    that.goodsList = res.data.data
+                    var searchResultChangeList = []
+                    // 循环商品数组，得到包含关键字的新数组
+                    that.goodsList.forEach(item => {
+                        if (item.productName.indexOf(newValue) != -1) {
+                            searchResultChangeList.push(item)
+                            return true
+                        }
+                        return searchResultChangeList
+                    })
+                    that.goodsList = searchResultChangeList
+                    that.productLength = that.goodsList.length
+
+                    if (that.productLength != 0) {
+                        that.showFlag = true;
+                    }
+                    if (that.productLength == 0) {
+                        that.showFlag = false
+                    }
+                    that.isLoad = false
+                    return that.goodsList
+                }).catch(function (err) {
+                    console.log('error' + err)
+                })
             }
         },
         created() {
-            this.searchResult();
+            this.beforeLoad ()
+            this.searchResult()
+            this.getNavImg ()
         },
         mounted() {
+        },
+        beforeUpdate () {
         },
         methods: {
             // 获取商品数据
 
-            getAllGoods() {
-                this.$http.get('../../../static/js/productData.json').then((res) => {
-                    var newList = [];
-                    this.goodsList = res.body;
-                    this.goodsList.forEach(item => {
-                            if (item.productName.indexOf(this.keywords) != -1) {
-                                newList.push(item)
-                        }
-                    });
-                    this.goodsList = newList;
-                    this.productLength = newList.length;
-
-                    // var showFlag;
-
-
-                    if (this.productLength != 0) {
-                        this.showFlag = true;
-
-                    }
-
-                    if (this.productLength == 0) {
-                        this.showFlag = false
-                    }
-                }, err => {
-                    console.log(err)
-                });
-            },
-            getKeyWords() {
-                this.keywords = this.$route.query.key;
-            },
-
+            // getAllGoods() {
+            //     var that = this
+            //     this.$axios.get('/products').then(function (res) {
+            //         console.log('success')
+            //         that.goodsList = res.data.data
+            //     }).catch(function (err) {
+            //         console.log('error' + err)
+            //     })
+            // },
             searchResult() {
-                this.getKeyWords();
-                this.getAllGoods();
+                var that = this
+                this.$axios.get('/products').then(function (res) {
+                    that.goodsList = res.data.data 
+                    var searchResultList = []
+                    that.goodsList.forEach(item => {
+                        if (item.productName.indexOf(that.$store.state.keywords) != -1) {
+                            searchResultList.push(item)
+                            return true
+                        }
+                        return searchResultList
+                    })
+                    that.goodsList = searchResultList || []
+                    that.productLength = that.goodsList.length
+                    that.isLoad = false
+                    // that.searchResultLength (that.productLength)
+                    if (that.productLength != 0) {
+                        that.showFlag = true;
+                    }
+                    if (that.productLength == 0) {
+                        that.showFlag = false
+                    }
+                    return that.goodsList
+
+                }).catch (function (err) {
+                    console.log('error' +err)
+                })
+            },
+            //获取商品导航的图片
+
+            getNavImg () {
+                var that = this 
+                this.$axios.get('/navImg').then(function (res) {
+                    console.log('success')
+                    that.navList = res.data.data
+                }).catch(function (err) {
+                    console.log('error' + err)
+                })
+            },
+
+            // // 判断搜索结果的长度
+
+            // searchResultLength (len) {
+            //     if (that.len != 0) {
+            //         that.showFlag = true;
+            //     }
+            //     if (that.len == 0) {
+            //         that.showFlag = false
+            //     }
+            // },
+
+            // 显示正在加载提示
+            beforeLoad () {
+                this.isLoad = true
             }
         },
         components: {
@@ -198,10 +262,11 @@ import panel from '../components/panel.vue'
         }
     }
 
-    .no-product {
+    .no-product, .loading {
         text-align: center; 
         padding: 100px 0; 
         font-size: 20px;
+        height: 500px;
     }
 
     .product-nav {
