@@ -2,7 +2,7 @@
     <div>
         <panel :title="addressListTit">
             <div slot="r">
-                <input type="button" name="" value="添加收货地址" readonly="readonly" class="add-address-btn" @click="isPopup = !isPopup">
+                <input type="button" name="" value="添加收货地址" readonly="readonly" class="add-address-btn" @click="addNewAddress">
             </div>
             <div slot="content" class="addressList-content">
                 <ul class="table-title">
@@ -11,29 +11,25 @@
                     <li>电话</li>
                 </ul>
                 <div class="lists">
-                    <transition-group mode="out-in" tag="div" appear>
-                        <div class="item" v-for="item in addressList" :key="item.id">
-                            <div class="username">
-                                <span>{{ item.username }}</span>
-                            </div>
-                            <div class="address">
-                                <span>{{ item.detailAddress }}</span>
-                            </div>
-                            <div class="tel">
-                                <span>{{ item.tel }}</span>
-                                <i v-if="item.checked" class="set-default">（默认地址）</i>
-                                <a href="#" @click.prevent="changeChecked(item)" v-if="!item.checked" ref="default" class="set-default">设为默认地址</a>
-                            </div>
-                            <div class="buttons">
-                                <span class="iconfont icon-edit"></span>
-                                <span class="iconfont icon-delete" @click.prevent="del(item.id)"></span>
-                            </div>
+                    <div class="item" v-for="item in ($store.state.address)" :key="item.id">
+                        <div class="username">
+                            <span>{{ item.username }}</span>
                         </div>
-                    </transition-group>
-
-
+                        <div class="address">
+                            <span>{{ item.detailAddress }}</span>
+                        </div>
+                        <div class="tel">
+                            <span>{{ item.tel }}</span>
+                            <i v-if="item.checked" class="set-default">（默认地址）</i>
+                            <a href="#" @click.prevent="changeChecked(item)" v-if="!item.checked" ref="default" class="set-default">设为默认地址</a>
+                        </div>
+                        <div class="buttons">
+                            <a class="iconfont icon-edit" @click.prevent='revise' @click='resiveInfo (item)'></a>
+                            <a class="iconfont icon-delete" @click.prevent="del(item.id)"></a>
+                        </div>
+                    </div>
                 </div>
-                <div class="no-address" v-if="len ? 0:1">
+                <div class="no-address" v-if="($store.state.address).length ? 0:1">
                     <h3>你还未添加收货地址</h3>
                     <p>
                         <input type="button" name="" value="添加收货地址" readonly="readonly" class="address-btn" @click="isPopup = !isPopup">
@@ -41,7 +37,8 @@
                 </div>
             </div>
         </panel>
-        <popup v-if="isPopup" @func="getLocalAddress"></popup>
+        <!-- <popup v-if="isPopup" @getPopupState="addNewAddress"></popup> -->
+        <popup v-if="isPopup" @getPopupState="addNewAddress" @getResive="revise" :title="title" :addressInfo="addressinfo" :isResive="isResive"></popup>
     </div>
 </template>
 
@@ -53,81 +50,42 @@
         data: function() {
             return {
                 isPopup: false,
-                addressList: [],
-                len: 0,
                 isShow: true,
                 addressListTit: '收货地址',
                 setDefault: false,
                 first:'',
-                count: 1
+                count: 1,
+                title: '',
+                addressinfo: '',
+                isResive: ''
             }
-        },
-        created() {
-            this.getLocalAddress();
-            // this.checked();
-        },
-        mounted() {
-            // this.changeChecked();
-            // this.checked();
         },
         methods: {
-            // getAddressData() {
-            //     this.$http.get('../../../static/js/addressData.json').then(res => {
-            //         this.addressList = res.body;
-            //     }, err => {
-            //         console.log(err)
-            //     });
-                 
-            // },
-            getLocalAddress() {
-                // 从本地请求地址数据
-                this.addressList = JSON.parse(localStorage.getItem('address') || '[]');
-
-                this.len = this.addressList.length;
-            },
             del(id) {
-                this.addressList.some((item,i) => {
-                    if (item.id == id) {
-                        this.addressList.splice(i,1);
-                        return true;
-                    }
-                })
-                localStorage.setItem('address',JSON.stringify(this.addressList));
-
-                this.len = this.addressList.length;
-                
-                if (this.len > 0) {
-                    this.isShow = 1;
-                } else {
-                    this.isShow = 0;
-                }
+                // 删除仓库中的地址信息
+                this.$store.commit ('delAddress', id)
             },
-            changeChecked(newaddress) {
-                var date = new Date();
-                date = date.getTime();//得到时间的13位毫秒数
-                
-                var addAddress = { id: date, username: newaddress.username, tel: newaddress.tel, detailAddress: newaddress.detailAddress, checked: true }
-                this.del(newaddress.id);
-
-                // this.addressList.some((item,i) => {
-                //     if (item.id == newaddress.id) {
-                //         this.addressList.splice(i,1);
-                //         return true;
-                //     }
-                // });
-                this.addressList.unshift(addAddress);
-                this.checked();
-                localStorage.setItem('address',JSON.stringify(this.addressList));
+            // 添加新地址
+            addNewAddress (popupState) {
+                // 显示添加新地址弹窗
+                this.title = '新增收货地址'
+                this.isPopup = popupState
+                this.isResive = 1
             },
-
-            // 默认值检查
-            checked() {
-                this.addressList[0].checked = true;
-                 // 只能设置一个默认地址
-                for(var i = 1; i < this.len; i++) {
-                    this.addressList[i].checked = false;
-                }
-            }
+            changeChecked(item) {
+                this.$store.commit ('setDefaultAddress', item)
+                this.$store.state.address = JSON.parse (localStorage.getItem ('address'))
+            },
+            // 修改地址
+            revise(popupState) {
+                this.title = '修改收货地址'
+                this.isPopup = popupState
+                this.isResive = -1
+            },
+            // 传递修改地址的信息
+            resiveInfo (obj) {
+                this.addressinfo = obj
+            },
         },
         components: {
             popup,
@@ -212,14 +170,15 @@
                     position: absolute; 
                     right: 20px;
                     bottom: 0;
-                    span {
+                    a {
+                        display: inline-block;
                         font-weight: 500; 
                         padding-right: 10px;
                     }
-                    span.icon-edit {
+                    a.icon-edit {
                         color: #20a0ff;
                     }
-                    span.icon-delete {
+                    a.icon-delete {
                         color: #666;
                     }
                 }

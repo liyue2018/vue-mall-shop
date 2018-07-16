@@ -115,17 +115,7 @@ import panel from '../components/panel.vue'
         beforeUpdate () {
         },
         methods: {
-            // 获取商品数据
-
-            // getAllGoods() {
-            //     var that = this
-            //     this.$axios.get('/products').then(function (res) {
-            //         console.log('success')
-            //         that.goodsList = res.data.data
-            //     }).catch(function (err) {
-            //         console.log('error' + err)
-            //     })
-            // },
+            // 获取搜索商品数据
             searchResult() {
                 var that = this
                 this.$axios.get('/products').then(function (res) {
@@ -165,18 +155,6 @@ import panel from '../components/panel.vue'
                     console.log('error' + err)
                 })
             },
-
-            // // 判断搜索结果的长度
-
-            // searchResultLength (len) {
-            //     if (that.len != 0) {
-            //         that.showFlag = true;
-            //     }
-            //     if (that.len == 0) {
-            //         that.showFlag = false
-            //     }
-            // },
-
             // 显示正在加载提示
             beforeLoad () {
                 this.isLoad = true

@@ -1,32 +1,32 @@
 <template>
-    <div class="popup" ref="popup">
+    <div class="popup">
         <div class="mask">
             <div class="content">
                 <div class="topbar">
                     <div class="dialog-tit">
-                        <h4>新增收货地址</h4>
+                        <h4>{{ title }}</h4>
                     </div>
-                    <div class="close" @click='popupClose'>
+                    <a class="close" @click.prevent='popupClose'>
                         <span class="iconfont icon-close"></span>
-                    </div>
+                    </a>
                 </div>
                 <div class="pcontent">
-                    <div class="informs">
+                    <p v-show="isResive === -1">{{addressInfo}}</p>
+                    <div class="informs" @change="inputValueChange">
                         <div class="name">
                             <input type="text" placeholder="收货人姓名" name="username" v-model="username">
-                        </div>
-                        <div class="tel">
-                            <input type="text" placeholder="手机号码" name="tel" v-model="tel">
                         </div>
                         <div class="address">
                             <input type="text" placeholder="收货地址" name="address" v-model="detailAddress">
                         </div>
+                        <div class="tel">
+                            <input type="number" placeholder="手机号码" name="tel" v-model="tel">
+                        </div>
                         <p class="checkbox">
                             <input type="checkbox" v-model="checked">
                             <span>设为默认值</span>
-                            <label for="checkbox">{{ checked }}</label>
                         </p>
-                        <button type="button" class="disabled-btn" @click="getNewAddress">保存</button>
+                        <button type="button" class="save-btn" :disabled="disabled" :class="{'disabled-btn': isDisabled}" @click="getNewAddress">保存</button>
                     </div>
                 </div>
             </div>
@@ -41,43 +41,77 @@
                 username: '',
                 tel: '',
                 detailAddress: '',
-                newAddress: [],
-                checked: false
+                addressList: [],
+                checked: false,
+                isDisabled: true,
+                disabled: true,
             }
         },
         created() {
-            // this.getNewAddress();
+            this.modifyOrAdd ()
+
         },
         methods: {
+            // 判断是修改还是增加
+            modifyOrAdd () {
+                if (this.isResive === -1) {
+                    this.username = this.addressInfo.username
+                    this.tel = this.addressInfo.tel 
+                    this.detailAddress = this.addressInfo.detailAddress
+                    this.checked = this.addressInfo.checked
+                }
+            },
             popupClose() {
-                this.$refs.popup.style.display = 'none';
+                // 执行父组件传过来的函数 将弹窗状态传给父组件
+                var popup = false
+                this.$emit ('getPopupState', popup)
+                this.$emit ('getResive', popup)
             },
             getNewAddress() {
-                var date = new Date();
-                date = date.getTime();//得到时间的13位毫秒数
-                var addAddress = { id: date, username: this.username, tel: this.tel, detailAddress: this.detailAddress, checked: this.checked }
 
-                this.newAddress = JSON.parse(localStorage.getItem('address') || '[]');
+                // 如果是修改地址 
+                if (this.isResive === -1) {
+                    console.log ('-1')
+                    var addAddress = { id: this.addressInfo.id, username: this.username, tel: this.tel, detailAddress: this.detailAddress, checked: this.checked }
 
-                if (addAddress.checked == true) {
-                    this.newAddress.unshift(addAddress);
+                    this.$store.commit ('modifyAddress', addAddress)
+                    this.popupClose ()
+                    // 将该新增地址保存至本地存储
+                    // localStorage.setItem ('address', JSON.stringify(this.addressList));
+
                 } else {
+                    var date = new Date();
+                    date = date.getTime();//得到时间的13位毫秒数
+                    var addAddress = { id: date, username: this.username, tel: this.tel, detailAddress: this.detailAddress, checked: this.checked }
+                    this.addressList = JSON.parse(localStorage.getItem('address') || '[]');
+                    if (addAddress.checked == true) {
+                        this.addressList.unshift(addAddress);
+                    } else {
 
-                    this.newAddress.push(addAddress);
+                        this.addressList.push(addAddress);
+                    }
+                    // 将该新增地址保存至本地存储
+                    localStorage.setItem ('address', JSON.stringify(this.addressList));
+                    // 把地址列表推到仓库
+                    this.$store.commit ('getAddressList', this.addressList)
+                    // 重置输入框
+                    this.username = ''
+                    this.detailAddress = ''
+                    this.tel = '';
+                    // 重新把按钮设置为不可点击状态
+                    this.isDisabled = true 
+                    this.disabled = true
                 }
-
-
-                // 将该新增地址保存至本地存储
-
-                localStorage.setItem('address', JSON.stringify(this.newAddress));
-                this.$emit('func');
-
-                this.username = this.tel = this.detailAddress = '';
-
-                // 执行父组件传过来的函数
-
+            },
+            // 表单都不为空时，可以保存
+            inputValueChange () {
+                if (this.username != '' && this.detailAddress != '') {
+                    this.isDisabled = false 
+                    this.disabled = false
+                } 
             }
-        }
+        },
+        props: ['title','addressInfo','isResive']
     }
 </script>
 
@@ -156,21 +190,35 @@
                                 height: 20px; 
                             }
                         }
+
+                        .tel {
+                            input::-webkit-outer-spin-button,
+                            input::-webkit-inner-spin-button {
+                                -webkit-appearance: none;
+                            }
+                            input[type="number"]{
+                                -moz-appearance: textfield;
+                            }
+                        }
                     }
-                    button {
+                    button.save-btn {
                             width: 100%; 
                             padding: 12px 0; 
                             border-radius: 5px;
                             font-size: 14px;
                             margin-top: 20px;
                             border: 1px solid #afafaf;
-                            &.disabled-btn {
-                                background: #a9a9a9;
-                                border: 1px solid #afafaf;
-                                background-image: linear-gradient(180deg,#b8b8b8,#a9a9a9);
-                                color: #fff;
-                            }
+                            background-color: #678ee7;
+                            background-image: linear-gradient(180deg,#678ee7,#5078df);
+                            color: #fff;
                         }
+                    .disabled-btn { 
+                        background: #a9a9a9;
+                        border: 1px solid #afafaf;
+                        background-image: linear-gradient(180deg,#b8b8b8,#a9a9a9);
+                        cursor: not-allowed;
+                        opacity: 0.5;
+                    }
                 }
 
             }

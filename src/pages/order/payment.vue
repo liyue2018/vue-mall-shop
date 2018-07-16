@@ -4,24 +4,9 @@
         <p class="tips">请在 24 小时内完成支付，超时订单将自动取消。</p>
         <p class="tips">我们不会在您完成支付后的 72 小时内发货，所以不要支付了</p>
         <div class="payment-way">
-            <a href="javascript:;" class="active" @click="onSelected">
-              <img src="static/images/alipay.png" alt="支付宝支付" />
+            <a href="javascript:;"  v-for="(item, i) in payMethodsList" @click.prevent="choicePayMethods (item, i)" :class="{ 'active': item.isActive }">
+              <img :src="item.imgUrl" :alt="item.alt" />
             </a>
-            <a href="javascript:;">
-              <img src="static/images/qqpay.png" alt="qq支付" />
-            </a>
-            <a href="javascript:;">
-              <img src="static/images/weixinpay.png" alt="微信支付" />
-            </a>
-           <!-- <router-link to="/order/alipay" class="active">
-               <img src="/static/images/alipay.png" alt="">
-           </router-link>
-           <router-link to="/order/qqpay">
-               <img src="/static/images/qqpay.png" alt="">
-           </router-link>
-           <router-link to="/order/weixinpay">
-               <img src="/static/images/weixinpay.png" alt="">
-           </router-link> -->
         </div>
     </div>
 </template>
@@ -30,14 +15,48 @@
   export default {
     data: function() {
       return {
-        selectedType: ''
+        selectedType: '',
+        payMethodsList: [
+          { id: 1, imgUrl: 'static/images/alipay.png', alt: '支付宝支付', isActive: true },
+          { id: 2, imgUrl: 'static/images/qqpay.png', alt: ' qq支付', isActive: false },
+          { id: 3, imgUrl: 'static/images/weixinpay.png', alt: '微信支付', isActive: false }
+        ]
       }
     },
     methods: {
-      onSelected() {
-        this.selectedType = 1;
-        // console.log(this.selectedType)
-        this.$emit('selectedtype', this.selectedType)
+      choicePayMethods (item, i) {
+        // 添加选中状态
+        this.payMethodsList.forEach (payItem => {
+          payItem.isActive = false
+          if (payItem.id === item.id) {
+            payItem.isActive = true
+            return true
+          }
+        })
+        // 给父组件传递选中的类型值
+        switch(item.id) {
+          case 1:
+            this.selectedType = 1
+
+            // 选中的状态保存到本地存储中 
+            localStorage.setItem ('selectType', JSON.stringify (this.selectedType))
+            this.$emit ('selectedtype', this.selectedType)
+            break;
+          case 2:
+            this.selectedType = 2
+
+            // 选中的状态保存到本地存储中 
+            localStorage.setItem ('selectType', JSON.stringify(this.selectedType))
+            this.$emit ('selectedtype', this.selectedType)
+            break;
+          case 3:
+            this.selectedType = 3
+
+            // 选中的状态保存到本地存储中 
+            localStorage.setItem ('selectType', JSON.stringify(this.selectedType))
+            this.$emit ('selectedtype', this.selectedType)
+            break;
+        }
       }
     }
   }

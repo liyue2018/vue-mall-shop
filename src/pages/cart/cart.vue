@@ -38,7 +38,7 @@
                 </div>
                 <div class="cart-bottom clearfix">
                     <div class="fl all-check-box">
-                        <input type="checkbox" name="" class="selected">
+                        <input type="checkbox" name="" class="selected" :checked="allSelected" @click="checkedAll">
                         <label>全选</label>
                         <a href="javascript:;" class="delete-choose-goods">删除选中的商品</a>
                     </div>
@@ -82,6 +82,7 @@ import buynum from '../components/buynum.vue'
         data: function() {
             return {
                 goodsList: '',
+                allSelected: this.$store.getters.goodsPerSelected
             }
         },
         created() {
@@ -97,7 +98,25 @@ import buynum from '../components/buynum.vue'
             },
             selectedChanged(id, i) {
                 var goodsSelected = { id: id, selected: this.$refs.checkbox[i].checked };
-                this.$store.commit('updateSelected', goodsSelected);
+
+                // 更新仓库里 购物车选中的状态
+                this.$store.commit ('updateSelected', goodsSelected);
+
+                // 当购物车商品的选中状态改变时，检测全选状态
+                this.allSelected = this.$store.getters.goodsPerSelected
+            },
+
+            // 全选
+            checkedAll () {
+                this.allSelected = !this.allSelected
+                var that = this
+                this.goodsList.forEach (item => {
+                    item.selected = that.allSelected
+                })
+                this.$refs.checkbox.checked = this.allSelected
+
+                var goodschecked = this.$refs.checkbox.checked
+                this.$store.commit('updateSelected', goodschecked)
             }
         },
         components: {
@@ -111,7 +130,6 @@ import buynum from '../components/buynum.vue'
 <style lang="scss" rel="stylesheet/scss">
     .cart-header {
         height: 100px;
-        // overflow-y: hidden;
         .nav {
             opacity: 0;
             height: 0 !important;
@@ -173,6 +191,7 @@ import buynum from '../components/buynum.vue'
                     float: left;
                 }
                 .selected {
+                    transition: all 0.5 ease;
                 }
                 .items-img {
                     display: inline-block;

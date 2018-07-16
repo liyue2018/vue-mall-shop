@@ -11,10 +11,9 @@
                     <div class="payment-info">
                         <span>订单金额:<em>￥{{ $store.getters.getTotal.amount }}</em></span>
                         <span>实际应付金额:<em>￥{{ $store.getters.getTotal.amount }}</em></span>
-
-                        <router-link :to="locationHref" type="button" disabled="disabled" class="disabled-btn">立即支付
-                       </router-link>
-                        <!-- <button type="button" disabled="disabled" class="disabled-btn">立即支付</button> -->
+                        <router-link :to="locationHref">
+                           <a href="javascript:;" type="button" class="btn" :disabled="disabled" :class="{'disabled-btn': isDisabled}" @click="judgeLocationHerf">立即支付</a>
+                        </router-link>
                     </div>
                 </div>
             </div>
@@ -23,9 +22,9 @@
                     <span>收货信息</span>
                 </div>
                 <div class="content">
-                    <p>姓名: 朝阳群众</p>
-                    <p>联系电话: 12345678900</p>
-                    <p>详细地址：北京市朝阳区</p>
+                    <p>姓名: {{ $store.state.address[0].username }}</p>
+                    <p>联系电话: {{ $store.state.address[0].tel }}</p>
+                    <p>详细地址：{{ $store.state.address[0].detailAddress }}</p>
                 </div>
             </div>
             <div class="goods-info">
@@ -68,21 +67,41 @@
         data: function () {
             return {
                 locationHref: '',
-                selectedtype: ''
-
+                selectedtype: '',
+                isDisabled: true,
+                disabled: true
             }
         },
-        created() {
+        created () {
+            this.getSelectData () 
         },
         methods: {
-            getSelectedType(selectedtype){
-                this.selectedtype = selectedtype;
+            // 获取本地存储中的选中类型值
+            getSelectData () {
+                this.selectedtype = JSON.parse (localStorage.getItem ('selectType')) || ''
+            },
+            getSelectedType (data) {
+                this.selectedtype = data
+                this.isDisabled = false
+                this.disabled = false
             },
 
             // 判断 selectedtype,进行跳转
 
-            judgeSelectedType() {
-                
+            judgeLocationHerf () {
+                switch (this.selectedtype) {
+                    case 1:
+                        this.locationHref = '/order/alipay'
+                        break;
+                    case 2:
+                        this.locationHref = '/order/qqpay'
+                        break;
+                    case 3:
+                        this.locationHref = '/order/wexinpay'
+                        break;
+                    default:
+                        this.locationHref = '/order/payment'
+                }
             }
 
         },
@@ -96,7 +115,6 @@
 <style lang="scss" rel="stylesheet/scss">
     .order-header {
         height: 100px;
-        // overflow-y: hidden;
         .nav {
             opacity: 0;
             height: 0;
@@ -135,13 +153,6 @@
                 .tips {
                     color: #928f91;
                 }
-
-                // .time-down {
-                //     position: absolute;
-                //     bottom: 100px;
-                //     left: 50%;
-                //     transform: translateX(-50%);
-                // }
                 .payment-info {
                     border-top: 1px solid #e5e5e5; 
                     background: #f9f9f9; 
@@ -161,15 +172,19 @@
                             font-weight: 700;
                         }
                     }
-                    .disabled-btn {
+                    .btn {
                         border: 1px solid #afafaf; 
                         border-radius: 4px; 
-                        background: #a9a9a9; 
-                        background-image: linear-gradient(180deg,#b8b8b8,#a9a9a9);
-                        cursor: not-allowed;
                         padding: 10px 26px;
                         color: #fff;
                         font-size: 14px;
+                        background-color: #678ee7;
+                        background-image: linear-gradient(180deg,#678ee7,#5078df);
+                    }
+                    .disabled-btn {
+                        background: #a9a9a9; 
+                        background-image: linear-gradient(180deg,#b8b8b8,#a9a9a9);
+                        cursor: not-allowed;
                     }
                 }
 

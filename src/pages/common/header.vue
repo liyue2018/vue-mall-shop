@@ -129,7 +129,7 @@
 
                     // 判断滚动的距离超过 90px 让nav 吸顶 透明度从0到1变化
                     if (scrollY > 90) {
-                        nav.style.position = 'fixed';
+                        nav.style.position = 'fixed' || '';
                         nav.style.top = 0 + 'px';
                         nav.style.zIndex = 3;
 

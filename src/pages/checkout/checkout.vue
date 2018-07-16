@@ -6,7 +6,7 @@
             <panel :title="addressTit" class="address-info">
                 <div slot="content">
                     <transition-group mode="out-in" tag="div">
-                        <div class="card" :class="{selected: item.checked}" v-for="item in addressList" :key="item.id">
+                        <div class="card" :class="{selected: item.checked}" v-for="item in ($store.state.address)" :key="item.id">
                             <ul class="user-info">
                                 <li>收货人: {{ item.username }}</li>
                                 <li>收货地址: {{ item.detailAddress }}</li>
@@ -16,17 +16,17 @@
                                 <span class="iconfont icon-selected"></span>
                             </div>
                             <div class="operation-section">
-                                <a class="update-btn">修改</a>
-                                <a class="del-btn" @click.prevent="del(item.id)">删除</a>
+                                <a class="update-btn" @click.prevent='revise' @click='resiveInfo (item)'>修改</a>
+                                <a class="del-btn" @click.prevent="del (item.id)">删除</a>
                             </div>
                         </div>
                     </transition-group>
-                    <div class="card" @click="isPopup=!isPopup">
+                    <a href="javascript:;" class="card" @click.prevent="addNewAddress">
                         <div class="new-address">
                             <span class="add-icon">+</span>
                             <span>添加新地址</span>
                         </div>
-                    </div>
+                    </a>
                 </div>
             </panel>
             <!-- 收货信息结束 -->
@@ -41,8 +41,8 @@
                             <span>小计</span>
                         </p>
                     </div>
-                    <div>
-                        <div class="cart-table" v-for="item in $store.getters.getSelectedGoods" :key="item.id">
+                    <div class="list-body">
+                        <div class="cart-table" v-for="item in ($store.getters.getSelectedGoods)" :key="item.id">
                             <div class="items-choose">
                                 <div class="items-img">
                                     <img :src="item.productImgUrl" alt="" />
@@ -67,9 +67,9 @@
                                 <h6 class="shopping-tips">应付总额不含运费</h6>
                             </div>
                             <div class="fl">
-                                <router-link to="/order/payment">
-                                    <input type="button" readonly="readonly" value="提交订单" name="" class="now-buy-btn" />
-                                </router-link>
+                                <a href="javascript:;">
+                                    <input type="button" readonly="readonly" value="提交订单" name="" class="now-buy-btn" :class="{'disable-btn': isDisable}" ref="nowBuyBtn" :disable="disable" @click.prevent="nowBuy" />
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -77,8 +77,8 @@
             </panel>
             <!-- 购物清单结束 -->
         </div>
-        <popup v-if="isPopup" @func="getLocalAddress"></popup>
-
+        <!-- 新增收货地址的弹窗 -->
+        <popup v-if="isPopup" @getPopupState="addNewAddress" @getResive="revise" :title="title" :addressInfo="addressinfo" :isResive="isResive"></popup>
         <mall-footer></mall-footer>
     </div>
 </template>
@@ -95,51 +95,58 @@ import panel from '../components/panel.vue'
         data: function() {
             return {
                 isPopup: false,
-                addressList: [],
                 addressTit: '收货信息',
-                shoppingTit: '购物清单'
+                shoppingTit: '购物清单',
+                isDisable: false, 
+                disable: false,
+                title: '',
+                addressinfo: '',
+                isResive: ''
             }
         },
         created() {
-            this.getLocalAddress();
         },
         methods: {
-            // getAddressData() {
-            //     this.$http.get('../../../static/js/addressData.json').then(res => {
-            //         this.addressList = res.body;
-            //     }, err => {
-            //         console.log(err)
-            //     });
-                 
-            // },
-
-            getLocalAddress() {
-                // 从本地请求地址数据
-                this.addressList = JSON.parse(localStorage.getItem('address') || '[]');
-                
+            // 添加新地址
+            addNewAddress (popupState) {
+                // 显示添加新地址弹窗
+                this.title = '新增收货地址'
+                this.isPopup = popupState,
+                this.isResive = 1
             },
             del(id) {
-                this.addressList.some((item,i) => {
-                    if(item.id == id) {
-                        this.addressList.splice(i,1);
-                        return true;
-                    }
-                });
-                // console.log(this.addressList);
-                localStorage.setItem('address',JSON.stringify(this.addressList));
+                // 删除仓库中的地址信息
+                this.$store.commit ('delAddress', id)
             },
-            // 默认值检查
-            checked() {
-                 // 只能设置一个默认地址
-                for(var i = 1; i < this.len; i++) {
-                    this.addressList[i].checked = false;
-                }
+            // 修改地址
+            revise(popupState) {
+                this.title = '修改收货地址'
+                this.isPopup = popupState
+                this.isResive = -1
+
+
+                // console.log (item)
+            },
+            // 传递修改地址的信息
+            resiveInfo (obj) {
+                // console.log (obj)
+                this.addressinfo = obj
+                // this.addressinfo.isResive = true
+            },
+            // 提交订单
+            nowBuy () {
+                this.disable = true
+                this.isDisable = true
+                this.$refs.nowBuyBtn.value = '正在提交订单中'
+                setTimeout(function () {
+                    location.href = '#/order/payment'
+                }, 1500)
             }
         },
         components: {
-            "mall-header": mallHeader,
-            "mall-footer": mallFooter,
-            "buynum": buynum,
+            mallHeader,
+            mallFooter,
+            buynum,
             popup,
             panel
         }
@@ -149,7 +156,6 @@ import panel from '../components/panel.vue'
 <style lang="scss" rel="stylesheet/scss">
     .checkout-header {
         height: 100px;
-        // overflow-y: hidden;
         .nav {
             opacity: 0;
             height: 0;
@@ -305,6 +311,9 @@ import panel from '../components/panel.vue'
             }
 
         }
+        .list-body {
+            padding-bottom: 50px;
+        }
         .cart-table {
             height: 140px; 
             line-height: 6;
@@ -355,12 +364,11 @@ import panel from '../components/panel.vue'
                         }
                     }
                 }
-                
             }
         }
 
         .cart-bottom {
-            height: 90px; 
+            height: 110px; 
             padding: 20px;
             width: 100%;
             background: #fdfdfd;
@@ -370,14 +378,14 @@ import panel from '../components/panel.vue'
             border-radius: 0 0 8px 8px;
             position: absolute; 
             bottom: 0;
-            
             .shopping {
                 .shopping-total {
-                    width: 170px;
+                    width: 200px;
                     color: #323232; 
                     line-height: 1.4285;
                     font-size: 16px;
                     float: left;
+                    margin-top: 6px;
                     .shopping-tips {
                         color: #959595;
                         font-size: 12px;
@@ -404,7 +412,14 @@ import panel from '../components/panel.vue'
                      text-align: center; 
                      padding: 14px 0;
                      font-size: 16px;
-
+                     &:hover {
+                        background: #2b53bb;
+                        background-image: linear-gradient(180deg,#5078df,#2b53bb);
+                     }
+                }
+                .disable-btn {
+                    cursor: not-allowed;
+                    opacity: 0.6;
                 }
             }
         }
