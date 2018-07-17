@@ -17,9 +17,6 @@
                         <div slot="required">
                             账户没填呢
                         </div>
-                        <!-- <template slot="required" scope="state">
-                            <span v-if="state.$touched || state.$submitted">账户没填呢</span>
-                        </template> -->
                     </field-messages>
                 </validate>
 

@@ -24,23 +24,70 @@ import Weixinpay from '../pages/order/weixinpay.vue'
 import Popup from '../pages/components/popup.vue'
 import Search from '../pages/search/search.vue'
 
-var router = new VueRouter({
+// scrollBehavior:
+// - only available in html5 history mode
+// - defaults to no scroll behavior
+// - return false to prevent scroll
+const scrollBehavior = (to, from, savedPosition) => {
+  if (savedPosition) {
+    // savedPosition is only available for popstate navigations.
+    return savedPosition
+  } else {
+    const position = {}
+    // new navigation.
+    // scroll to anchor by returning the selector
+    if (to.hash) {
+      position.selector = to.hash
+    }
+    // check if any matched route config has meta that requires scrolling to top
+    if (to.matched.some(m => m.meta.scrollToTop)) {
+      // cords will be used if no selector is provided,
+      // or if the selector didn't match any element.
+      position.x = 0
+      position.y = 0
+    }
+    // if the returned position is falsy or an empty object,
+    // will retain current scroll position.
+    return position
+  }
+}
+
+const router = new VueRouter({
+    // 添加异步滚动
+    mode: 'history',
+    base: __dirname,
+    scrollBehavior,
     routes: [
         { 
             path: '/', 
             component: Index, 
             redirect: '/home',
             children: [
-                { path: 'home', component: Home },
-                { path: 'goods', component: Goods },
-                { path: 'goodsDetails', component: GoodsDetail },
+                { path: 'home', component: Home},
+                { path: 'goods', component: Goods},
+                { path: 'goodsDetails', component: GoodsDetail, meta: { scrollToTop: true }},
                 { path: 'search', component: Search }
             ]
         },
         { path: '/login', component: Login},
         { path: '/register', component: Register},
-        { path: '/cart', component: Cart},
-        { path: '/checkout', component: Checkout},
+        { 
+            path: '/cart', 
+            component: Cart
+            // 路由独享的守卫
+            // beforeEnter: (to, from, next) => {
+
+            // }
+        },
+        { 
+            path: '/checkout',
+            name: 'checkout',
+            meta: {
+                requireAuth: true
+            },
+            component: Checkout,
+
+        },
         { 
             path: '/user', 
             component: User,
@@ -68,5 +115,11 @@ var router = new VueRouter({
     ],
     linkActiveClass: 'active'
 })
+
+// 全局路由守卫
+
+// router.beforeEach ((to, from, next) => {
+//     // ...
+// })
 
 export default router

@@ -167,6 +167,14 @@ var count = 0;
                 var that = this
                 // axios请求
                 this.$axios.get('/products').then(function (res) {
+                // this.$axiox.default
+                // this.$axios({
+                //     method: 'get',
+                //     // data: json,
+                //     // dataType: 'jsonp',
+                //     baseURL: '/api',
+                //     url: '/7568/productData'
+                // }).then(function (res) {
                     console.log('连接成功')
                     var products = res.data.data 
                     that.hotP = products.slice(0,4);
@@ -175,7 +183,7 @@ var count = 0;
                     that.wellChosenP = products.slice(16, 22);
                 })
                 .catch(function (err) {
-                    conosle.log('连接失败' + err)
+                    console.log('连接失败' + err)
                 })
             },
             // 获取轮播图

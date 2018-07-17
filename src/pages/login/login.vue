@@ -24,7 +24,7 @@
                 </validate>
 
                 <validate tag="label" class="form-control">
-                    <input type="password" name="password" v-model="model.password" required placeholder="重复密码">
+                    <input type="password" name="password" v-model="model.password" required placeholder="密码">
                     <field-messages name="password" class="prompt" show="$dirty && $touched">
                         <div style="color: #137d3b">
                             Success!

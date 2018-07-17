@@ -2,10 +2,14 @@
 * @Author: liyue2018
 * @Date:   2018-07-12 15:39:48
 * @Last Modified by:   liyue2018
-* @Last Modified time: 2018-07-12 18:45:19
+* @Last Modified time: 2018-07-16 23:55:27
 */
 
 const Mock = require('mockjs')
+
+Mock.setup({
+    timeout: '10-100'
+})
 
 var Random = Mock.Random
 
