@@ -2,7 +2,7 @@
 * @Author: liyue2018
 * @Date:   2018-06-22 15:03:55
 * @Last Modified by:   liyue2018
-* @Last Modified time: 2018-07-13 16:00:02
+* @Last Modified time: 2018-07-18 15:49:29
 */
 
 // 重置浏览器设置
@@ -56,11 +56,12 @@ i, em {
     font-style: normal;
 }
 
+// 当为数字类型时 去除调节按钮
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
 }
-input[type="number"]{
+input[type="number"] {
     -moz-appearance: textfield;
 }
 

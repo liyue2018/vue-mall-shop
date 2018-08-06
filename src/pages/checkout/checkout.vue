@@ -104,42 +104,42 @@ import panel from '../components/panel.vue'
                 isResive: ''
             }
         },
-        created() {
-        },
         methods: {
+
             // 添加新地址
             addNewAddress (popupState) {
+
                 // 显示添加新地址弹窗
-                this.title = '新增收货地址'
-                this.isPopup = popupState,
-                this.isResive = 1
+                this.title = '新增收货地址';
+                this.isPopup = popupState;
+                this.isResive = 1;
             },
-            del(id) {
-                // 删除仓库中的地址信息
-                this.$store.commit ('delAddress', id)
+            
+            // 删除仓库中的地址信息
+            del (id) {
+                this.$store.commit ('delAddress', id);
             },
+
             // 修改地址
-            revise(popupState) {
-                this.title = '修改收货地址'
-                this.isPopup = popupState
-                this.isResive = -1
-
-
-                // console.log (item)
+            revise (popupState) {
+                this.title = '修改收货地址';
+                this.isPopup = popupState;
+                this.isResive = -1;
             },
+
             // 传递修改地址的信息
             resiveInfo (obj) {
-                // console.log (obj)
-                this.addressinfo = obj
-                // this.addressinfo.isResive = true
+                this.addressinfo = obj;
             },
+
             // 提交订单
-            nowBuy () {
-                this.disable = true
-                this.isDisable = true
-                this.$refs.nowBuyBtn.value = '正在提交订单中'
-                setTimeout(function () {
-                    location.href = '#/order/payment'
+            nowBuy() {
+                this.disable = true;
+                this.isDisable = true;
+                this.$refs.nowBuyBtn.value = '正在提交订单中';
+
+                setTimeout(function() {
+                    location.href = '/order/payment';
                 }, 1500)
             }
         },

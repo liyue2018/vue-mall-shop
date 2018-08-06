@@ -21,39 +21,46 @@
         },
         methods: {
             countDown() {
+
                 var down = this.$refs.down;
+
                 if (this.productNum == 1) {
                     this.downDisable = 'true';
                     this.productNum = 1;
 
                 } else {
+
                     if (this.downDisable) {
                         this.downDisable = !this.downDisable;
                     }
                     this.productNum --;
+
                 }
             },
+
             countUp() {
                 this.productNum ++;
+
                 if (this.downDisable) {
                     this.downDisable = !this.downDisable;
                 }
             },
+
             getInitCount() {
                 this.productNum = this.initcount || 1;
             }
         },
         watch: {
             'productNum': function (newVal) {
-                this.$emit('getcount', newVal);
+                
                 var goodsinfo = {
                         id: this.goodsId,
                         count: this.productNum
                 }
-                this.$store.commit('updateCarNum', goodsinfo)
+                this.$emit('getcount', newVal);
+                this.$store.commit ('updateCarNum', goodsinfo);
             }
         },
-
         props: ['initcount','goodsId']
     }
 </script>

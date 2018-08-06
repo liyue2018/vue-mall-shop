@@ -66,17 +66,15 @@
                     <router-link to="/goods" tag="a" class="go-buy-btn">现在选购</router-link>
                 </div>
             </div>
-            
         </div>
         <mall-footer></mall-footer>
     </div>
 </template>
 
 <script>
-
-import mallHeader from '../common/header.vue'
-import mallFooter from '../common/footer.vue'
-import buynum from '../components/buynum.vue'
+    import mallHeader from '../common/header.vue'
+    import mallFooter from '../common/footer.vue'
+    import buynum from '../components/buynum.vue'
 
     export default {
         data: function() {
@@ -92,31 +90,41 @@ import buynum from '../components/buynum.vue'
             getGoodsList() {
                 this.goodsList = this.$store.state.car;
             },
-            delCarGoods(id, index) {
+
+            // 删除购物车中的商品
+            delCarGoods (id, index) {
                 this.goodsList.splice(index,1);
                 this.$store.commit('removeFormCar',id);
             },
-            selectedChanged(id, i) {
-                var goodsSelected = { id: id, selected: this.$refs.checkbox[i].checked };
+            
+            selectedChanged (id, i) {
+                var goodsSelected = { 
+                    id: id, 
+                    selected: this.$refs.checkbox[i].checked 
+                };
 
                 // 更新仓库里 购物车选中的状态
                 this.$store.commit ('updateSelected', goodsSelected);
 
                 // 当购物车商品的选中状态改变时，检测全选状态
-                this.allSelected = this.$store.getters.goodsPerSelected
+                this.allSelected = this.$store.getters.goodsPerSelected;
             },
 
             // 全选
-            checkedAll () {
-                this.allSelected = !this.allSelected
-                var that = this
-                this.goodsList.forEach (item => {
-                    item.selected = that.allSelected
-                })
-                this.$refs.checkbox.checked = this.allSelected
+            checkedAll() {
 
-                var goodschecked = this.$refs.checkbox.checked
-                this.$store.commit('updateSelected', goodschecked)
+                var that = this,
+                    goodschecked;
+
+                this.allSelected = !this.allSelected;
+
+                this.goodsList.forEach (item => {
+                    item.selected = that.allSelected;
+                });
+
+                this.$refs.checkbox.checked = this.allSelected;
+                goodschecked = this.$refs.checkbox.checked;
+                this.$store.commit('updateSelected', goodschecked);
             }
         },
         components: {

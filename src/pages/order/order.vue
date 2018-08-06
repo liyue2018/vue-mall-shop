@@ -64,7 +64,7 @@
     import mallFooter from '../common/footer.vue'
 
     export default {
-        data: function () {
+        data: function() {
             return {
                 locationHref: '',
                 selectedtype: '',
@@ -72,38 +72,38 @@
                 disabled: true
             }
         },
-        created () {
-            this.getSelectData () 
+        created() {
+            this.getSelectData(); 
         },
         methods: {
+
             // 获取本地存储中的选中类型值
-            getSelectData () {
-                this.selectedtype = JSON.parse (localStorage.getItem ('selectType')) || ''
+            getSelectData() {
+                this.selectedtype = JSON.parse (localStorage.getItem ('selectType')) || '';
             },
+
             getSelectedType (data) {
-                this.selectedtype = data
-                this.isDisabled = false
-                this.disabled = false
+                this.selectedtype = data;
+                this.isDisabled = false;
+                this.disabled = false;
             },
 
             // 判断 selectedtype,进行跳转
-
-            judgeLocationHerf () {
-                switch (this.selectedtype) {
+            judgeLocationHerf() {
+                switch(this.selectedtype) {
                     case 1:
-                        this.locationHref = '/order/alipay'
+                        this.locationHref = '/order/alipay';
                         break;
                     case 2:
-                        this.locationHref = '/order/qqpay'
+                        this.locationHref = '/order/qqpay';
                         break;
                     case 3:
-                        this.locationHref = '/order/wexinpay'
+                        this.locationHref = '/order/wexinpay';
                         break;
                     default:
-                        this.locationHref = '/order/payment'
+                        this.locationHref = '/order/payment';
                 }
             }
-
         },
         components: {
             "mallHeader": mallHeader,

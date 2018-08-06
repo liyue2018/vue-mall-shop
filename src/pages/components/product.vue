@@ -11,9 +11,10 @@
                     <i>￥</i>
                     <span>{{ item.productPrice }}</span>
                 </div>
-                <button class="btn-default" type="button">
+                <y-button text="查看详情" classStyle="gray-btn"></y-button>
+                <!-- <button class="btn-default" type="button">
                     查看详情
-                </button>
+                </button> -->
             </div>
         </router-link>
     </div>
@@ -21,29 +22,33 @@
 </template>
 
 <script>
+import YButton from "../components/button.vue"
     export default {
         data: function() {
             return {
-                productItem: '',
+                productItem: null,
                 productId: ''
             }
-        },
-        created() {
         },
         mounted() {
             this.getProductData();
         },
         methods: {
-            getProductData(id) {
+            getProductData (id) {
                 this.product.forEach(item => {
+
                     if (item.id == id) {
                         this.productItem = item;
                         return true;
                     }
                 });
+
                 // 将该商品保存至本地存储
-                localStorage.setItem('products', JSON.stringify(this.productItem));
+                localStorage.setItem ('products', JSON.stringify (this.productItem));
             }
+        },
+        components: {
+            YButton
         },
         props: ['product']
     }
@@ -52,6 +57,9 @@
 <style lang="scss" rel="stylesheet/scss" scoped>
 
       .product-box-item {
+        display: flex;
+        justify-content: center;
+        // align-items: center;
         width: 305px;
         height: 430px;
         text-align: center;
@@ -62,7 +70,7 @@
         &:hover {
             box-shadow: 1px 1px 10px 2px rgba(0, 0, 0, 0.3);
             top: -1px;
-            .btn-default {
+            .gray-btn {
                 opacity: 1;
             }
         }

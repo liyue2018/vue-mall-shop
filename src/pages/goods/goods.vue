@@ -1,5 +1,11 @@
 <template>
     <div>
+        <!-- <div class="loading" v-if="loading">
+            Loading...
+        </div>
+        <div v-if="error" class="error">
+            {{ error }}
+        </div> -->
         <!-- 排序开始 -->
         <div class="sort-box w">
             <a href="javascript:;" :class="{active:sortType===1}" @click="reset">综合排序</a>
@@ -49,8 +55,10 @@
 <script>
 import product from '../components/product.vue';
     export default {
-        data: function () {
+        data: function() {
             return {
+                loading: true,
+                error: null,
                 goodsList: [],
                 sortType: 1,
                 sort: 0,
@@ -61,82 +69,114 @@ import product from '../components/product.vue';
             }
         },
         computed: {
-            goodsList1: function () {
-                return sortPriceToHigh (this.goodsList, 'productPrice')
+            goodsList1: function() {
+                return this.sortPriceToHigh (this.goodsList, 'productPrice')
             },
-            goodsList2: function () {
-                return sortPriceToLow (this.goodsList, 'productPrice')
+            goodsList2: function() {
+                return this.sortPriceToLow (this.goodsList, 'productPrice')
             }
         },
         filters: {
             filterPrice: function (value, min, max) {
-                if (!min || !max) return value
-                // if (!max) return value
-                if (max - min < 0 || max === min) return value
-                // if (min === '' || max === '' && max < min) return value
-                // max > min
-                var newList = []
-                value.forEach( item => {
-                    // statements
+                let newList = [];
+
+                if (!min || !max) {
+                    return value;
+                }
+
+                if (max - min < 0 || max === min) {
+                    return value;
+                }
+
+                value.forEach ( item => {
+
                     if (item.productPrice > min && item.productPrice < max) {
-                        newList.push(item)
-                        return true
+                        newList.push(item);
+                        return true;
                     }
                 })
-                if (newList.length === 0) return value
-                return newList
+
+                if (newList.length === 0) {
+                    return value;
+                }
+
+                return newList;
             },
             filterLength: function (value) {
-                // if (value.length === 0) {
-                //     return 0
-                // }
-                return value.length
+                return value.length;
             }
         },
-        created () {
-            this.getAllGoods ()
+        created() {
+            this.getAllGoods();
         },
         beforeUpdate() {
         },
         methods: {
+
             // 获取商品数据
-            getAllGoods () {
+            getAllGoods() {
+                var that = this;
+
                 if (this.goodsList.length === 0) {
-                    this.showFlag = true
+                    this.showFlag = true;
                 }
-                var that = this
+
                 this.$axios.get('/products').then(function (res) {
-                    console.log('success')
-                    that.showFlag = false
-                    that.goodsList = res.data.data
+                    that.loading = false;
+                    console.log('success');
+                    that.showFlag = false;
+                    that.goodsList = res.data.data;
                 }).catch(function (err) {
-                    console.log('error' + err)
-                    that.showFlag = false
+                    console.log('error' + err);
+                    that.showFlag = false;
                 })
             },
+
             // 价格排序
             sortByPrice (v) {
-                v === 1 ? this.sortType = 2 : this.sortType = 3
-                this.sort = v 
-                this.minPrice = this.maxPrice = ''
+                v === 1 ? this.sortType = 2 : this.sortType = 3;
+                this.sort = v ;
+                this.minPrice = this.maxPrice = '';
             },
+
             // 重置
-            reset () {
-                this.sortType = 1
-                this.sort = 0
-                this.minPrice = this.maxPrice = ''
+            reset() {
+                this.sortType = 1;
+                this.sort = 0;
+                this.minPrice = this.maxPrice = '';
             },
+
             // 点击确认按钮
-            makeSure () {
-                this.sort = -2 
-                this.sortType = ''
-                this.isDisabled = true
+            makeSure() {
+                this.sort = -2; 
+                this.sortType = '';
+                this.isDisabled = true;
             },
+
             // 输入框的值改变时，执行
-            inputValueChange () {
+            inputValueChange() {
+
                 if (this.minPrice && this.maxPrice && this.maxPrice - this.minPrice > 0) {
-                    this.isDisabled = false
+                    this.isDisabled = false;
                 }
+            },
+
+            // 价格从低到高排序
+            sortPriceToHigh (array, key) {
+                return array.sort(function (a, b) {
+                    var x = a[key];
+                    var y = b[key];
+                    return ((x < y) ? -1 : (x > y) ? 1 : 0);
+                });
+            },
+
+            // 价格从高到低排序
+            sortPriceToLow (array, key) {
+                return array.sort(function (a, b) {
+                    var x = a[key];
+                    var y = b[key];
+                    return ((x > y) ? -1 : (x < y) ? 1 : 0);
+                });
             }
         },
         components: {
@@ -144,21 +184,36 @@ import product from '../components/product.vue';
         }
     }
     // 价格从低到高排序
-    function sortPriceToHigh(array, key) {
-        return array.sort(function (a, b) {
-            var x = a[key]
-            var y = b[key]
-            return ((x<y)?-1:(x>y)?1:0)
-        })
-    }
-    // 价格从高到低排序
-    function sortPriceToLow(array, key) {
-        return array.sort(function (a, b) {
-            var x = a[key]
-            var y = b[key]
-            return ((x>y)?-1:(x<y)?1:0)
-        })
-    }
+
+    // function sortPriceToHigh (key) {
+    //     return function (a, b) {
+    //         var x = a[key], 
+    //             y = b[key]; 
+
+    //         if (x < y) {
+    //             return -1; 
+    //         } else if (x > y) {
+    //             return 1;
+    //         } else {
+    //             return 0;
+    //         }
+    //     }
+    // }
+    // function sortPriceToHigh (array, key) {
+    //     return array.sort(function (a, b) {
+    //         var x = a[key];
+    //         var y = b[key];
+    //         return ((x < y) ? -1 : (x > y) ? 1 : 0);
+    //     });
+    // }
+    // // 价格从高到低排序
+    // function sortPriceToLow (array, key) {
+    //     return array.sort(function (a, b) {
+    //         var x = a[key];
+    //         var y = b[key];
+    //         return ((x > y) ? -1 : (x < y) ? 1 : 0);
+    //     });
+    // }
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>

@@ -18,7 +18,7 @@
     import panel from '../../components/panel.vue'
 
     export default {
-        data: function () {
+        data: function() {
             return {
                 submitImgUrl: '',
                 informationTit: '账户资料'
@@ -32,10 +32,13 @@
         },
         methods: {
             getImgUrl() {
+
                 // 在修改之前获取 缓存中的头像信息
                 this.submitImgUrl = JSON.parse(localStorage.getItem('submitImgUrl'));
             },
+
             submitImg() {
+                
                 // 将修改后的图片地址保存至本地缓存中
                 this.submitImgUrl = '/static/images/' + this.$refs.submitImg.files[0].name;
 

@@ -15,7 +15,7 @@ import mallHeader from './common/header.vue';
 import mallFooter from './common/footer.vue';
 
 export default {
-    data: function () {
+    data: function() {
         return {}
     },
     components: {

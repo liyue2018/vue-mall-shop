@@ -2,7 +2,7 @@
     <panel :title="couponTitle">
         <div slot="content" class="coupon-content">
             <div class="no-coupon">
-                <img src="static/images/no-search.png" alt="">
+                <img src="/static/images/no-search.png" alt="">
                 <h2 class="discount">您目前还没有优惠券</h2>
             </div>
         </div>

@@ -25,38 +25,60 @@
     },
     methods: {
       choicePayMethods (item, i) {
+
         // 添加选中状态
         this.payMethodsList.forEach (payItem => {
-          payItem.isActive = false
-          if (payItem.id === item.id) {
-            payItem.isActive = true
-            return true
-          }
-        })
+            payItem.isActive = false;
+
+            if (payItem.id === item.id) {
+                payItem.isActive = true;
+                return true;
+            }
+
+        });
+
         // 给父组件传递选中的类型值
-        switch(item.id) {
-          case 1:
-            this.selectedType = 1
 
-            // 选中的状态保存到本地存储中 
-            localStorage.setItem ('selectType', JSON.stringify (this.selectedType))
-            this.$emit ('selectedtype', this.selectedType)
-            break;
-          case 2:
-            this.selectedType = 2
+        if (!item.id) {
 
-            // 选中的状态保存到本地存储中 
-            localStorage.setItem ('selectType', JSON.stringify(this.selectedType))
-            this.$emit ('selectedtype', this.selectedType)
-            break;
-          case 3:
-            this.selectedType = 3
+          if (item.id === 1) {
+              this.selectedType = 1;
+          } else if (item.id === 2) {
+              this.selectedType = 2;
+          } else if (item.id === 3) {
+              this.selectedType = 3;
+          } else {
+            console.log("您还没有选择支付方式");
+          }
 
-            // 选中的状态保存到本地存储中 
-            localStorage.setItem ('selectType', JSON.stringify(this.selectedType))
-            this.$emit ('selectedtype', this.selectedType)
-            break;
+          // 选中的状态保存到本地存储中 
+          localStorage.setItem('selectType', JSON.stringify (this.selectedType));
+          this.$emit('selectedtype', this.selectedType);
         }
+        // switch(item.id) {
+        //   case 1:
+        //     this.selectedType = 1;
+
+        //     // 选中的状态保存到本地存储中 
+        //     localStorage.setItem ('selectType', JSON.stringify (this.selectedType));
+        //     this.$emit ('selectedtype', this.selectedType);
+        //     break;
+        //   case 2:
+        //     this.selectedType = 2;
+
+        //     // 选中的状态保存到本地存储中 
+        //     localStorage.setItem ('selectType', JSON.stringify(this.selectedType));
+        //     this.$emit ('selectedtype', this.selectedType);
+        //     break;
+        //   case 3:
+        //     this.selectedType = 3;
+
+        //     // 选中的状态保存到本地存储中 
+        //     localStorage.setItem ('selectType', JSON.stringify(this.selectedType));
+        //     this.$emit ('selectedtype', this.selectedType);
+        //     break;
+        //   // 这里没有 default
+        // }
       }
     }
   }

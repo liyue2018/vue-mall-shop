@@ -1,60 +1,70 @@
+import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import Home from '../pages/home/home.vue'
-import Login from '../pages/login/login.vue'
-import Register from '../pages/register/register.vue'
-import Goods from '../pages/goods/goods.vue'
-import Index from '../pages/index.vue'
-import GoodsDetail from '../pages/goods/goodsDetail.vue'
-import Cart from '../pages/cart/cart.vue'
-import Checkout from '../pages/checkout/checkout.vue'
-import User from '../pages/user/user.vue'
-import Support from '../pages/user/children/support.vue'
-import OrderList from '../pages/user/children/order-list.vue'
-import Information from '../pages/user/children/information.vue'
-import AddressList from '../pages/user/children/addressList.vue'
-import Coupon from '../pages/user/children/coupon.vue'
-import Replace from '../pages/user/children/replace.vue'
-import OrderDetail from '../pages//user/children/order-detail.vue'
-import Order from '../pages/order/order.vue'
-import Payment from '../pages/order/payment.vue'
-import Alipay from '../pages/order/alipay.vue'
-import Qqpay from '../pages/order/qqpay.vue'
-import Weixinpay from '../pages/order/weixinpay.vue'
-import Popup from '../pages/components/popup.vue'
-import Search from '../pages/search/search.vue'
+// 路由懒加载
+const Home = () => import('../pages/home/home.vue')
+const Login = () => import ('../pages/login/login.vue')
+const Register = () => import ('../pages/register/register.vue')
+const Goods = () => import ('../pages/goods/goods.vue')
+const Index = () => import ('../pages/index.vue')
+const GoodsDetail = () => import ('../pages/goods/goodsDetail.vue')
+const Cart = () => import ('../pages/cart/cart.vue')
+const Checkout = () => import ('../pages/checkout/checkout.vue')
+const User = () => import ('../pages/user/user.vue')
+const Support = () => import ('../pages/user/children/support.vue')
+const OrderList = () => import ('../pages/user/children/order-list.vue')
+const Information = () => import ('../pages/user/children/information.vue')
+const AddressList = () => import ('../pages/user/children/addressList.vue')
+const Coupon = () => import ('../pages/user/children/coupon.vue')
+const Replace = () => import ('../pages/user/children/replace.vue')
+const OrderDetail = () => import ('../pages//user/children/order-detail.vue')
+const Order = () => import ('../pages/order/order.vue')
+const Payment = () => import ('../pages/order/payment.vue')
+const Alipay = () => import ('../pages/order/alipay.vue')
+const Qqpay = () => import ('../pages/order/qqpay.vue')
+const Weixinpay = () => import ('../pages/order/weixinpay.vue')
+const Popup = () => import ('../pages/components/popup.vue')
+const Search = () => import ('../pages/search/search.vue')
 
 // scrollBehavior:
 // - only available in html5 history mode
 // - defaults to no scroll behavior
 // - return false to prevent scroll
+
 const scrollBehavior = (to, from, savedPosition) => {
+
   if (savedPosition) {
-    // savedPosition is only available for popstate navigations.
-    return savedPosition
+    return savedPosition;
   } else {
-    const position = {}
+    const position = {};
+
     // new navigation.
     // scroll to anchor by returning the selector
+
     if (to.hash) {
       position.selector = to.hash
     }
+
     // check if any matched route config has meta that requires scrolling to top
     if (to.matched.some(m => m.meta.scrollToTop)) {
       // cords will be used if no selector is provided,
       // or if the selector didn't match any element.
-      position.x = 0
-      position.y = 0
+      position.x = 0;
+      position.y = 0;
     }
+
     // if the returned position is falsy or an empty object,
     // will retain current scroll position.
-    return position
+    return position;
   }
 }
 
+Vue.use(VueRouter);
+
 const router = new VueRouter({
+
     // 添加异步滚动
-    mode: 'history',
+    mode: 'history', // 清除地址栏中的 # 
     base: __dirname,
     scrollBehavior,
     routes: [
@@ -63,21 +73,21 @@ const router = new VueRouter({
             component: Index, 
             redirect: '/home',
             children: [
-                { path: 'home', component: Home},
-                { path: 'goods', component: Goods},
-                { path: 'goodsDetails', component: GoodsDetail, meta: { scrollToTop: true }},
+                { path: 'home', name: 'home', component: Home, meta: { scrollToTop: true} },
+                { path: 'goods', component: Goods },
+                { path: 'goodsDetails', component: GoodsDetail, meta: { scrollToTop: true} },
                 { path: 'search', component: Search }
             ]
         },
-        { path: '/login', component: Login},
-        { path: '/register', component: Register},
+        { path: '/login', name: 'login', component: Login },
+        { path: '/register', component: Register },
         { 
             path: '/cart', 
+            name: 'cart',
+            meta: {
+                requireAuth: true
+            },
             component: Cart
-            // 路由独享的守卫
-            // beforeEnter: (to, from, next) => {
-
-            // }
         },
         { 
             path: '/checkout',
@@ -85,11 +95,14 @@ const router = new VueRouter({
             meta: {
                 requireAuth: true
             },
-            component: Checkout,
-
+            component: Checkout
         },
         { 
             path: '/user', 
+            name: 'user',
+            meta: {
+                requireAuth: true
+            },
             component: User,
             redirect: '/user/orderList',
             children: [
@@ -103,13 +116,23 @@ const router = new VueRouter({
             ]
 
         },
-        { path: '/order', redirect: '/order/payment', component: Order,
+        { 
+            path: '/order', 
+            meta: {
+                    requireAuth: true
+            },
+            redirect: '/order/payment', 
+            component: Order,
             children: [
-                { path: '/order/payment', component: Payment },
+                { path: '/order/payment',name: 'order', component: Payment },
                 { path: '/order/alipay', component: Alipay },
                 { path: '/order/qqpay', component: Qqpay },
                 { path: '/order/weixinpay', component: Weixinpay }
             ]
+        },
+        {
+            path: '*',
+            redirect: '/home'
         }
         
     ],
@@ -118,8 +141,35 @@ const router = new VueRouter({
 
 // 全局路由守卫
 
-// router.beforeEach ((to, from, next) => {
-//     // ...
-// })
+router.beforeEach ((to, from, next) => {
+    console.log ('navigation-guards');
+    const nextRoute = ['cart', 'checkout', 'user', 'order'];
+    // 是否登录
+    let isLogin = JSON.parse (localStorage.getItem('login') || '');
+    // 未登录状态；当路由到nextRoute指定页时，跳转至login
+    if (nextRoute.indexOf (to.name) >= 0) {
+        if (!isLogin) {
+            console.log ('未登录,请先登录');
+            var l = prompt ("未登录,请先登录");
+            if (l == true) {
+                router.push ({ name: 'login' });
+            } else {
+                router.push ({ name: 'home' });
+                console.log ('好吧，那就留在原地吧');
+            }
+        }
+    }
 
-export default router
+    // 已登录状态；当路由到login时，跳转至home 
+
+    if (to.name === 'login') {
+        if (isLogin) {
+            router.push ({ name: 'home' });
+        }
+    }
+
+    // 一定要调用该方法来 resolve 这个钩子。执行效果依赖 next 方法的调用参数。
+    next ();
+})
+
+export default router;

@@ -7,11 +7,16 @@
 <script>
 
 export default {
-    data: function () {
+    data: function() {
         return {
             title: 'liyue'
         }
-    }
+    },
+    // watch: {
+    //     '$route.path': function (newValue, oldValue) {
+    //         console.log (newValue + '====' + oldValue)
+    //     }
+    // }
 }
 
 

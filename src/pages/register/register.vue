@@ -85,9 +85,9 @@
         },
         methods: {
             onSubmit() {
-                if (this.formstate.$invalid) {
-                    return;
-                }
+
+                // if (this.formstate.$invalid) {
+                // }
             }
         }
     }

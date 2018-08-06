@@ -67,97 +67,117 @@ import panel from '../components/panel.vue'
                 isLoad: false
             }
         },
-        filters: {
-        },
         computed: {
-            resultGoodsList: function () {
-                return this.$store.state.keywords
+            resultGoodsList: function() {
+                return this.$store.state.keywords;
             }
         },
         watch: {
-            resultGoodsList (newValue, oldValue) {
-                var that = this
-                this.$axios.get('/products').then(function (res) {
-                    console.log('success')
-                    that.goodsList = res.data.data
-                    var searchResultChangeList = []
-                    // 循环商品数组，得到包含关键字的新数组
-                    that.goodsList.forEach(item => {
-                        if (item.productName.indexOf(newValue) != -1) {
-                            searchResultChangeList.push(item)
-                            return true
-                        }
-                        return searchResultChangeList
-                    })
-                    that.goodsList = searchResultChangeList
-                    that.productLength = that.goodsList.length
+            resultGoodsList (newValue) {
+                var that = this;
 
-                    if (that.productLength != 0) {
+                this.$axios.get('/products').then(function (res) {
+                    console.log('success');
+                    var searchResultChangeList = [];
+
+                    that.goodsList = res.data.data;
+
+                    // 循环商品数组，得到包含关键字的新数组
+                    that.goodsList.forEach( item => {
+
+                        if (item.productName.indexOf(newValue) != -1) {
+                            searchResultChangeList.push(item);
+                            return true;
+                        }
+
+                        return searchResultChangeList;
+                    });
+
+                    that.goodsList = searchResultChangeList;
+                    that.productLength = that.goodsList.length;
+
+                    if (that.productLength !== 0) {
                         that.showFlag = true;
                     }
-                    if (that.productLength == 0) {
-                        that.showFlag = false
+
+                    if (that.productLength === 0) {
+                        that.showFlag = false;
                     }
-                    that.isLoad = false
-                    return that.goodsList
+
+                    that.isLoad = false;
+
+                    return that.goodsList;
                 }).catch(function (err) {
-                    console.log('error' + err)
+                    console.log('error' + err);
                 })
             }
         },
         created() {
-            this.beforeLoad ()
-            this.searchResult()
-            this.getNavImg ()
+            this.beforeLoad();
+            this.searchResult();
+            this.getNavImg();
         },
         mounted() {
         },
-        beforeUpdate () {
+        destroyed() {
+            // this.$store.commit ('getSearchKeywords', '')
         },
         methods: {
+
             // 获取搜索商品数据
             searchResult() {
-                var that = this
+
+                var that = this;
+
                 this.$axios.get('/products').then(function (res) {
-                    that.goodsList = res.data.data 
-                    var searchResultList = []
-                    that.goodsList.forEach(item => {
+
+                    var searchResultList = [];
+                    that.goodsList = res.data.data;
+
+                    that.goodsList.forEach( item => {
+
                         if (item.productName.indexOf(that.$store.state.keywords) != -1) {
-                            searchResultList.push(item)
-                            return true
+                            searchResultList.push(item);
+                            return true;
                         }
-                        return searchResultList
+
+                        return searchResultList;
                     })
-                    that.goodsList = searchResultList || []
-                    that.productLength = that.goodsList.length
-                    that.isLoad = false
-                    // that.searchResultLength (that.productLength)
+
+                    that.goodsList = searchResultList || [];
+                    that.productLength = that.goodsList.length;
+                    that.isLoad = false;
+
                     if (that.productLength != 0) {
                         that.showFlag = true;
                     }
+
                     if (that.productLength == 0) {
-                        that.showFlag = false
+                        that.showFlag = false;
                     }
-                    return that.goodsList
 
+                    return that.goodsList;
                 }).catch (function (err) {
-                    console.log('error' +err)
+                    console.log('error' + err);
                 })
             },
-            //获取商品导航的图片
 
-            getNavImg () {
-                var that = this 
+            //获取商品导航的图片
+            getNavImg() {
+
+                var that = this;
+
                 this.$axios.get('/navImg').then(function (res) {
-                    console.log('success')
-                    that.navList = res.data.data
+                    console.log('success');
+                    that.navList = res.data.data;
                 }).catch(function (err) {
-                    console.log('error' + err)
+                    console.log('error' + err);
                 })
             },
+
             // 显示正在加载提示
-            beforeLoad () {
-                this.isLoad = true
+            beforeLoad() {
+                this.isLoad = true;
             }
         },
         components: {

@@ -59,7 +59,9 @@
     export default {
         data: function() {
             return {
-                formstate: {},
+                formstate: {
+
+                },
                 model: {
                     account: '',
                     password:''
@@ -68,9 +70,14 @@
         },
         methods: {
             onSubmit() {
-                if (this.formstate.$invalid) {
-                    return;
+                var isLogin = false;
+
+                if (this.formstate.$valid) {
+                    isLogin = true;
+                    console.log ('isLogin:===' + isLogin);
                 }
+                
+                localStorage.setItem ('login', JSON.stringify(isLogin));
             }
         }
     }

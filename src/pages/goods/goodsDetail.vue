@@ -3,20 +3,8 @@
         <div class="goods-panel clearfix">
             <div class="img-box">
                 <ul class="small-img" ref="imgList">
-                    <li class="item on">
-                        <img src="static/images/product-detail01.jpg" alt="">
-                    </li>
-                    <li class="item">
-                        <img src="static/images/product-detail02.jpg" alt="">
-                    </li>
-                    <li class="item">
-                        <img src="static/images/product-detail03.jpg" alt="">
-                    </li>
-                    <li class="item">
-                        <img src="static/images/product-detail04.jpg" alt="">
-                    </li>
-                    <li class="item">
-                        <img src="static/images/product-detail05.jpg" alt="">
+                    <li class="item on" v-for="(item, index) in imgLists" :key="index" ref="imgItem" @click="getSmallImg(item.src)">
+                        <img :src="item.src" :alt="item.alt" :title="item.alt" />
                     </li>
                 </ul>
                 <div class="big-img">
@@ -36,8 +24,13 @@
                     <buynum style="margin-left: 50px" @getcount="getBuyNum"></buynum>
                 </div>
                 <div class="buttons">
-                    <input type="button" name="" value="加入购物车" readonly="readonly" @click='addToShopCar' />
-                    <input type="button" name="" value="现在购买" readonly="readonly" />
+                    <y-button text="加入购物车"
+                              style="margin: 0 5px"
+                              classStyle="main-btn"
+                              @btnClick="addToShopCar(product.id, product.productName, product.productPrice, product.productImgUrl)"
+                              >
+                    </y-button>
+                    <y-button text="现在购买"></y-button>
                 </div>
 
                 <!-- 加入购物车动画 -->
@@ -45,9 +38,8 @@
                     @before-enter="beforeEnter"
                     @enter="enter"
                     @afterEnter="afterEnter">
-                    <div class="ball" v-show="ballFlag" ref="ball"></div>
+                    <div class="ball" v-show="ballFlag"></div>
                 </transition>
-                
             </div>
         </div>
         <!-- 产品信息 -->
@@ -62,93 +54,118 @@
 
 <script>
 
-    import $ from 'jquery'
+    // import $ from 'jquery'
     import buynum from '../components/buynum.vue'
+    import YButton from "../components/button.vue"
     export default {
-        data: function () {
+        data: function() {
             return {
                 bigImgUrl: '',
                 product:'',
                 ballFlag: false,
-                buyNum: 1
+                buyNum: 1,
+                imgLists: [
+                    { src: "static/images/product-detail01.jpg", alt: "详情图片1" },
+                    { src: "static/images/product-detail02.jpg", alt: "详情图片2" },
+                    { src: "static/images/product-detail03.jpg", alt: "详情图片3" },
+                    { src: "static/images/product-detail04.jpg", alt: "详情图片4" },
+                    { src: "static/images/product-detail05.jpg", alt: "详情图片5" },
+                ]
             }
         },
         created() {
+
             // 获取本地存储中的商品信息
             this.getLocalProduct();
         },
         mounted() {
-            this.changeImg();
+            // this.changeImg();
         },
         methods: {
-            // 点击小图片切换对应的大图片
-            changeImg() {
-                    var imgList = this.$refs.imgList;
-                    var that = this;
 
-                    $(imgList).on('click','li', function() {
-                        $(this).addClass('on').siblings().removeClass('on');
-                        that.bigImgUrl = $(this).find('img')[0].src;
-                    })
+            // 点击小图片切换对应的大图片
+            getSmallImg(src) {
+                this.bigImgUrl = src;
             },
             getLocalProduct() {
+
                 // 从本地请求商品数据
                 this.product = JSON.parse(localStorage.getItem('products'));
                 this.bigImgUrl = this.product.productImgUrl;
             }, 
 
             // 加入购物车效果
-
-            addToShopCar() {
+            // addCart (id, price, name, img) {
+            //     if (!this.showMoveImg) {     // 动画是否在运动
+            //       if (this.login) { // 登录了 直接存在用户名下
+            //         addCart({userId: getStore('userId'), productId: id, productNum: 1}).then(res => {
+            //           // 并不重新请求数据
+            //           this.ADD_CART({productId: id, salePrice: price, productName: name, productImg: img})
+            //         })
+            //       } else { // 未登录 vuex
+            //         this.ADD_CART({productId: id, salePrice: price, productName: name, productImg: img})
+            //       }
+            //       // 加入购物车动画
+            //       var dom = event.target
+            //       // 获取点击的坐标
+            //       let elLeft = dom.getBoundingClientRect().left + (dom.offsetWidth / 2)
+            //       let elTop = dom.getBoundingClientRect().top + (dom.offsetHeight / 2)
+            //       // 需要触发
+            //       this.ADD_ANIMATION({moveShow: true, elLeft: elLeft, elTop: elTop, img: img})
+            //       if (!this.showCart) {
+            //         this.SHOW_CART({showCart: true})
+            //       }
+            //     }
+            //   }
+            // },
+            addToShopCar(id, name, price, img) {
                 this.ballFlag = !this.ballFlag;
-
+                
                 var goodsinfo = { 
-                                  id: this.product.id, 
-                                  productName: this.product.productName, 
-                                  productTitle: this.product.productTitle, 
-                                  productPrice: this.product.productPrice,
-                                  productImgUrl: this.product.productImgUrl,
+                                  id: id, 
+                                  productName: name, 
+                                  productPrice: price,
+                                  productImgUrl: img,
                                   count: this.buyNum,
                                   selected: true
                               }
                 this.$store.commit("addToCar", goodsinfo);
             },
-            beforeEnter(el) {
+            
+            beforeEnter (el) {
                 el.style.transform = "translate(0,0)";
             },
-            enter(el, done) {
+            enter (el, done) {
                 el.offsetWidth;
+                el.innerHTML = this.buyNum;
 
                 // 获取小球的位置
-
-                const ballPosition = this.$refs.ball.getBoundingClientRect();
+                const ballPosition = el.getBoundingClientRect();
 
                 // 获取购物车徽标位置
-
                 const bagePosition = document.getElementById('bage').getBoundingClientRect();
 
+                // 计算小球移动的距离
                 const xDist = bagePosition.right - ballPosition.right; 
-                // console.log(xDist);
                 const yDist = bagePosition.top - ballPosition.top;
-                // console.log(yDist);
 
+                // 偏移的距离
                 el.style.transform = `translate(${xDist}px,${yDist}px)`;
-                el.style.transition = "all 0.5s cubic-bezier(.4,-0.3,1,.68)";
-
-                done()
+                el.style.transition = "all 1s cubic-bezier(.4,-0.3,1,.68)";
+                done();
             },
             afterEnter (el) {
                 this.ballFlag = !this.ballFlag;
             },
 
             // 加入购物车的数量
-
-            getBuyNum(count) {
+            getBuyNum (count) {
                 this.buyNum = count;
             }
         },
         components: {
-            buynum
+            buynum,
+            YButton
         }
     }
 </script>
@@ -243,44 +260,48 @@
             .buttons {
                 padding-top: 30px; 
                 border-top: 1px solid #ddd;
-                input[type='button'] {
-                    display: inline-block; 
-                    width: 145px; 
-                    height: 50px; 
-                    line-height: 50px; 
-                    text-align: center;
-                    border-radius: 5px;
-                    margin-right: 10px;
-                    &:first-child {
-                        background: #678ee7;
-                        background-image: linear-gradient(180deg,#678ee7,#5078df);
-                        border: 1px solid #5c81e3; 
-                        color: #fff;
-                        opacity: 0.94;
-                        &:hover {
-                            opacity: 1;
-                        }
-                    }
-                    &:last-child {
-                        border: 1px solid #e1e1e1;
-                        color: #646464;
-                        background: #f9f9f9;
-                        background-image: linear-gradient(180deg,#fff,#f9f9f9);
-                        opacity: 0.9;
-                        &:hover {
-                            opacity: 1;
-                        }
-                    }
+                // input[type='button'] {
+                //     display: inline-block; 
+                //     width: 145px; 
+                //     height: 50px; 
+                //     line-height: 50px; 
+                //     text-align: center;
+                //     border-radius: 5px;
+                //     margin-right: 10px;
+                //     &:first-child {
+                //         background: #678ee7;
+                //         background-image: linear-gradient(180deg,#678ee7,#5078df);
+                //         border: 1px solid #5c81e3; 
+                //         color: #fff;
+                //         opacity: 0.94;
+                //         &:hover {
+                //             opacity: 1;
+                //         }
+                //     }
+                //     &:last-child {
+                //         border: 1px solid #e1e1e1;
+                //         color: #646464;
+                //         background: #f9f9f9;
+                //         background-image: linear-gradient(180deg,#fff,#f9f9f9);
+                //         opacity: 0.9;
+                //         &:hover {
+                //             opacity: 1;
+                //         }
+                //     }
 
-                }
+                // }
             }
 
             .ball {
-                width: 15px; 
-                height: 15px; 
+                display: flex;
+                width: 20px; 
+                height: 20px; 
                 border-radius: 50%; 
                 background: red; 
                 position: absolute; 
+                justify-content: center;
+                align-items: center;
+                color: #fff;
                 top: 370px; 
                 right: 498px;
                 z-index: 6;

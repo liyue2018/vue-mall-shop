@@ -31,6 +31,7 @@
                     </div>
                     <div class="r-box">
                         <span class="sub-total">￥ 1.00</span>
+                        
                         <a href="javascript:;" class="order-btn">现在付款</a>
                     </div>
                 </div>

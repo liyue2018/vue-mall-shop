@@ -2,25 +2,16 @@
     <div>
         <div class="main-content w">
             <!-- 轮播图开始 -->
-            <div class="swiper" @mouseenter='stop' @mouseleave='start'>
-                <div class="swiper-container">
-                    <div class="swiper-item" v-for="(item, index) in bannerList" :key="index">
-                        <a href="#">
-                            <img :src="item.img" alt="">
-                        </a>
-                    </div>
-                </div>
-                <!-- 小圆点 -->
-                <ol class="indicators">
-                    <li></li>
-                    <li></li>
-                </ol>
-                <!-- 左右箭头 -->
-                <div class="arrow w">
-                    <a href="#" class="iconfont icon-back" @click='prev'></a>
-                    <a href="#" class="iconfont icon-more" @click='next'></a>
-                </div>
-            </div>
+                <swiper :options="swiperOption" ref="homeSwiper" class="home-swiper">
+                    <!-- slides -->
+                    <swiper-slide v-for="(item, index) in swiperItems" :key="index">
+                        <img :src="item.src" alt="" />
+                    </swiper-slide>
+                    <!-- Optional controls -->
+                    <div class="swiper-pagination"  slot="pagination"></div>
+                    <div class="swiper-button-prev" slot="button-prev"></div>
+                    <div class="swiper-button-next" slot="button-next"></div>
+                </swiper>
             <!-- 轮播图结束 -->
 
             <!-- 商品导航开始 -->
@@ -92,128 +83,126 @@
 <script>
 
 import panel from '../components/panel.vue'
-
 import product from '../components/product.vue'
-
-import $ from 'jquery';
-
+import { swiper, swiperSlide } from 'vue-awesome-swiper'
+// import $ from 'jquery';
 import '../../mock/banner-mock.js'
+
 
 var count = 0;
 
-    export default {
-        data: function () {
-            return {
-                timerId: null,
-                hotP: [],
-                choiceP: [],
-                choiceImg: 'static/images/choice.jpg',
-                brandP: [],
-                brandImg: 'static/images/brand01.jpg', 
-                wellChosenP: [],
-                wellChosenImg: 'static/images/brand02.jpg',
-                hotTitle: '热门商品',
-                choiceTitle: '官方精选',
-                brandTitle: '品牌周边',
-                wellChosenTitle: '品牌精选',
-                bannerList:[],
-                navList: []
-
-            }
-        },
-        created() {
-            // 获取首页商品的数据
-            this.getProductData()
-            this.getBannerImg()
-            this.getNavImg ()
-        },
-        mounted () {
-            var count = 0;
-            var that = this;
-
-            var auto = function() {
-                that.next();
-            }
-            this.timerId = setInterval(auto, 2000);
-        },
-        methods: {
-            next() {
-                var $swiper = $('.swiper-container .swiper-item');
-                count++;
-
-                if (count == $swiper.length) {
-                    count = 0;
+export default {
+    data: function() {
+        return {
+            timerId: null,
+            hotP: [],
+            choiceP: [],
+            choiceImg: 'static/images/choice.jpg',
+            brandP: [],
+            brandImg: 'static/images/brand01.jpg', 
+            wellChosenP: [],
+            wellChosenImg: 'static/images/brand02.jpg',
+            hotTitle: '热门商品',
+            choiceTitle: '官方精选',
+            brandTitle: '品牌周边',
+            wellChosenTitle: '品牌精选',
+            bannerList:[],
+            navList: [],
+            swiperOption: {
+                notNextTick: true,
+                loop: true,
+                autoplay: true,
+                speed: 1000,
+                grabCursor: true,
+                observeParents: true,
+                debugger: true,
+                pagination: {
+                    el: '.swiper-pagination',
+                },
+                paginationClickable: true,
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev'
                 }
-                $swiper.eq(count).fadeIn().siblings().fadeOut();
             },
-            prev() {
-                var $swiper = $('.swiper-container .swiper-item');
-                count --;
-                if (count == -1) {
-                    count = $swiper.length - 1;
-                }
-                $swiper.eq(count).fadeIn().siblings().fadeOut();
-            },
-            stop() {
-                clearInterval(this.timerId);
-            },
-            start() {
-                setInterval(this.auto, 3000);
-            },
-
-            // 获取首页商品的数据
-
-            getProductData () {
-                var that = this
-                // axios请求
-                this.$axios.get('/products').then(function (res) {
-                // this.$axiox.default
-                // this.$axios({
-                //     method: 'get',
-                //     // data: json,
-                //     // dataType: 'jsonp',
-                //     baseURL: '/api',
-                //     url: '/7568/productData'
-                // }).then(function (res) {
-                    console.log('连接成功')
-                    var products = res.data.data 
-                    that.hotP = products.slice(0,4);
-                    that.choiceP = products.slice(4,10);
-                    that.brandP = products.slice(10,16);
-                    that.wellChosenP = products.slice(16, 22);
-                })
-                .catch(function (err) {
-                    console.log('连接失败' + err)
-                })
-            },
-            // 获取轮播图
-
-            getBannerImg () {
-                var that = this
-                this.$axios.get('/bannerImg').then(function (res) {
-                    console.log('success')
-                    that.bannerList = res.data.data
-                }).catch(function (err) {
-                    console.log('error' + err)
-                })
-            },
-            //获取商品导航的图片
-
-            getNavImg () {
-                var that = this 
-                this.$axios.get('/navImg').then(function (res) {
-                    console.log('success')
-                    that.navList = res.data.data
-                }).catch(function (err) {
-                    console.log('error' + err)
-                })
-            }
-        },
-        components: {
-            product,
-            panel
+            swiperItems: [
+                { src: "/static/images/R1PC1.png" },
+                { src: "/static/images/pro2tebieban1.png" },
+                { src: "/static/images/20180802244011081.png" },
+            ]
         }
+    },
+    computed: {
+        swiper() {
+            return this.$res.homeSwiper.swiper
+        }
+    },
+    created() {
+
+        // 获取首页商品的数据
+        this.getProductData();
+        this.getBannerImg();
+        this.getNavImg ();
+    },
+    mounted() {},
+    methods: {
+
+        // 获取首页商品的数据
+        getProductData() {
+            var that = this
+
+            // axios请求
+            this.$axios.get('/products').then(function (res) {
+            // this.$axiox.default
+            // this.$axios({
+            //     method: 'get',
+            //     // data: json,
+            //     // dataType: 'jsonp',
+            //     baseURL: '/api',
+            //     url: '/7568/productData'
+            // }).then(function (res) {
+                console.log('连接成功')
+                var products = res.data.data 
+                that.hotP = products.slice(0,4);
+                that.choiceP = products.slice(4,10);
+                that.brandP = products.slice(10,16);
+                that.wellChosenP = products.slice(16, 22);
+            })
+            .catch(function (err) {
+                console.log('连接失败' + err);
+            })
+        },
+
+        // 获取轮播图
+        getBannerImg() {
+            var that = this
+
+            this.$axios.get('/bannerImg').then(function (res) {
+                console.log('success');
+                that.bannerList = res.data.data;
+            }).catch(function (err) {
+                console.log('error' + err);
+            })
+        },
+
+        //获取商品导航的图片
+        getNavImg() {
+            var that = this; 
+            this.$axios.get('/navImg').then(function (res) {
+                console.log('success');
+                that.navList = res.data.data;
+            }).catch(function (err) {
+                console.log('error' + err);
+            })
+        }
+    },
+    components: {
+        product,
+        panel, 
+        swiper,
+        swiperSlide
     }
+}
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
@@ -228,67 +217,22 @@ var count = 0;
             overflow: hidden;
             margin-top: 20px;
         }
-        .swiper-container {
-            height: 460px; 
-            background: #fff;
-            position: relative;
-            .swiper-item {
-                height: 100%;
-                position: absolute; 
-                top: 0; 
-                left: 0;
-                display: none;
+        .home-swiper {
+            height: 460px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
                 img {
-                    display: block; 
-                    width: 100%; 
-                    height: 100%;
+                    width: 100%;
+                    height: 460px;
+                    transform: scaleY(1.1);
                 }
-                &:first-child {
-                    display: block;
+            .swiper-pagination {
+                span {
+                    width: 10px;
+                    height: 10px;
                 }
             }
         }
-        .arrow {
-            padding: 0 10px;
-            position: absolute;
-            transform: translateY(-50%);
-            top: 50%;
-            z-index: 2;
-            a {
-                display: block;
-                width: 50px; 
-                height: 50px; 
-                line-height: 50px;
-                border-radius: 50%;
-                text-align: center;
-                background: rgba(255,255,255,0.2);
-                transition: all 0.5s ease;
-                &:hover {
-                    background: rgba(255,255,255,1);
-                }
-            }
-            a.icon-back {
-                float: left;
-            }
-            a.icon-more {
-                float: right;
-            }
-        }
-        .indicators {
-            position: absolute; 
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 2;
-            > li {
-                display: inline-block; 
-                width: 10px; 
-                height: 10px;
-                border-radius: 50%;
-                background: #ddd;
-            }
-        }
-
         .product-nav {
             height: 200px;
             margin: 30px 0;

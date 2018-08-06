@@ -8,23 +8,8 @@
                     <h3 class="username">test</h3>
                 </div>
                 <ul class="slider-nav-list">
-                    <li class="slider-nav-item">
-                        <router-link to="/user/orderList">我的订单</router-link>
-                    </li>
-                    <li class="slider-nav-item">
-                        <router-link to="/user/information">账户资料</router-link>
-                    </li>
-                    <li class="slider-nav-item">
-                        <router-link to="/user/addressList">收货地址</router-link>
-                    </li>
-                    <li class="slider-nav-item">
-                        <router-link to="/user/coupon">我的优惠</router-link>
-                    </li>
-                    <li class="slider-nav-item">
-                        <router-link to="/user/support">售后服务</router-link>
-                    </li>
-                    <li class="slider-nav-item">
-                        <router-link to="/user/replace">以旧换新</router-link>
+                    <li class="slider-nav-item" v-for="(item, index) in navItems" :key="index">
+                        <router-link :to="item.url">{{ item.title }}</router-link>
                     </li>
                 </ul>
             </div>
@@ -43,9 +28,17 @@
     import mallFooter from '../common/footer.vue'
 
     export default {
-        data: function () {
+        data: function() {
             return {
-                imgUrl: ''
+                imgUrl: '',
+                navItems: [
+                    { url: "/user/orderList", title: "我的订单" },
+                    { url: "/user/information", title: "账户资料" },
+                    { url: "/user/addressList", title: "收货地址" },
+                    { url: "/user/coupon", title: "我的优惠" },
+                    { url: "/user/support", title: "售后服务" },
+                    { url: "/user/replace", title: "以旧换新" }
+                ]
             }
         },
         created() {
@@ -57,8 +50,9 @@
             }
         },
         watch: {
-            '$route.path': function(newVal, oldVal) {
-                switch(newVal) {
+            '$route.path': function (newVal, oldVal) {
+
+                switch (newVal) {
                     case '/user/orderList':
                         console.log('欢迎进入我的订单页面')
                         break;
@@ -74,7 +68,6 @@
                     case '/user/coupon':
                         console.log('欢迎进入售后服务页面')
                         break;
-
                     default:
                     console.log('欢迎进入以旧换新页面');
                 }
@@ -169,7 +162,7 @@
         .v-enter, 
         .v-leave-to {
             opacity: 0; 
-            transform: translateY(80px);
+            transform: translateX(80px);
         }
 
         .v-enter-active, 

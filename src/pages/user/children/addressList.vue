@@ -61,10 +61,12 @@
             }
         },
         methods: {
-            del(id) {
+            del (id) {
+
                 // 删除仓库中的地址信息
-                this.$store.commit ('delAddress', id)
+                this.$store.commit ('delAddress', id);
             },
+
             // 添加新地址
             addNewAddress (popupState) {
                 // 显示添加新地址弹窗
@@ -72,16 +74,19 @@
                 this.isPopup = popupState
                 this.isResive = 1
             },
-            changeChecked(item) {
+
+            changeChecked (item) {
                 this.$store.commit ('setDefaultAddress', item)
                 this.$store.state.address = JSON.parse (localStorage.getItem ('address'))
             },
+
             // 修改地址
-            revise(popupState) {
+            revise (popupState) {
                 this.title = '修改收货地址'
                 this.isPopup = popupState
                 this.isResive = -1
             },
+            
             // 传递修改地址的信息
             resiveInfo (obj) {
                 this.addressinfo = obj

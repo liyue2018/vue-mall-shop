@@ -48,66 +48,79 @@
             }
         },
         created() {
-            this.modifyOrAdd ()
+            this.modifyOrAdd()
 
         },
         methods: {
             // 判断是修改还是增加
-            modifyOrAdd () {
+            modifyOrAdd() {
+
                 if (this.isResive === -1) {
-                    this.username = this.addressInfo.username
-                    this.tel = this.addressInfo.tel 
-                    this.detailAddress = this.addressInfo.detailAddress
-                    this.checked = this.addressInfo.checked
+                    this.username = this.addressInfo.username;
+                    this.tel = this.addressInfo.tel; 
+                    this.detailAddress = this.addressInfo.detailAddress;
+                    this.checked = this.addressInfo.checked;
                 }
             },
             popupClose() {
+
                 // 执行父组件传过来的函数 将弹窗状态传给父组件
-                var popup = false
-                this.$emit ('getPopupState', popup)
-                this.$emit ('getResive', popup)
+                var popup = false;
+                this.$emit ('getPopupState', popup);
+                this.$emit ('getResive', popup);
             },
             getNewAddress() {
 
                 // 如果是修改地址 
                 if (this.isResive === -1) {
-                    console.log ('-1')
-                    var addAddress = { id: this.addressInfo.id, username: this.username, tel: this.tel, detailAddress: this.detailAddress, checked: this.checked }
 
-                    this.$store.commit ('modifyAddress', addAddress)
-                    this.popupClose ()
-                    // 将该新增地址保存至本地存储
-                    // localStorage.setItem ('address', JSON.stringify(this.addressList));
+                    var addAddress = {
+                        id: this.addressInfo.id, 
+                        username: this.username, 
+                        tel: this.tel, 
+                        detailAddress: this.detailAddress, 
+                        checked: this.checked 
+                    }
 
+                    this.$store.commit ('modifyAddress', addAddress);
+                    this.popupClose ();
                 } else {
                     var date = new Date();
-                    date = date.getTime();//得到时间的13位毫秒数
-                    var addAddress = { id: date, username: this.username, tel: this.tel, detailAddress: this.detailAddress, checked: this.checked }
+                    date = date.getTime(); // 得到时间的13位毫秒数
+                    var addAddress = { 
+                        id: date, 
+                        username: this.username, 
+                        tel: this.tel, 
+                        detailAddress: this.detailAddress, 
+                        checked: this.checked 
+                    }
+
                     this.addressList = JSON.parse(localStorage.getItem('address') || '[]');
-                    if (addAddress.checked == true) {
+
+                    if (addAddress.checked === true) {
                         this.addressList.unshift(addAddress);
                     } else {
-
                         this.addressList.push(addAddress);
                     }
+
                     // 将该新增地址保存至本地存储
                     localStorage.setItem ('address', JSON.stringify(this.addressList));
+
                     // 把地址列表推到仓库
-                    this.$store.commit ('getAddressList', this.addressList)
+                    this.$store.commit ('getAddressList', this.addressList);
+
                     // 重置输入框
-                    this.username = ''
-                    this.detailAddress = ''
-                    this.tel = '';
+                    this.username = this.detailAddress = this.tel = '';
+
                     // 重新把按钮设置为不可点击状态
-                    this.isDisabled = true 
-                    this.disabled = true
+                    this.isDisabled = this.disabled = true 
                 }
             },
+
             // 表单都不为空时，可以保存
-            inputValueChange () {
+            inputValueChange() {
                 if (this.username != '' && this.detailAddress != '') {
-                    this.isDisabled = false 
-                    this.disabled = false
+                    this.isDisabled = this.disabled = false; 
                 } 
             }
         },

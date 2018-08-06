@@ -3,12 +3,22 @@
         <!-- 顶部logo开始 -->
         <header class="top-header w">
             <div class="logo fl">
-                <span class="iconfont icon-RFQ-filling icon-logo"></span>
+                <a href="/home" class="iconfont icon-RFQ-filling icon-logo"></a>
             </div>
             <div class="search-box fr">
                 <div class="search-form">
-                    <label><input type="text" name="search" value="" placeholder="请输入商品信息" v-model="keywords" @keyup.enter="setkeywords()" @blur="resetInput"></label>
-                    <router-link :to="{ path:'/search',query:{key: keywords}}"><span class="iconfont icon-search"></span></router-link>
+                    <!-- <label>
+                        <input type="text" name="search" value="" placeholder="请输入商品信息" v-model="keywords" @keyup.enter="setkeywords" @blur="resetInput" />
+                    </label>
+                    <router-link :to="{ path:'/search',query:{key: keywords}}">
+                        <span class="iconfont icon-search"></span>
+                    </router-link> -->
+                    <label>
+                        <input type="text" name="search" value="" placeholder="请输入商品信息" v-model="keywords" />
+                    </label>
+                    <router-link :to="{ path:'/search',query:{key: $store.state.keywords }}" class="iconfont icon-search">
+                    </router-link>
+
                 </div>
                 <ul class="nav-list fl">
                     <li>
@@ -25,33 +35,17 @@
                                 <p>test</p>
                             </div>
                             <ul class="user-list">
-                                <li class="item">
-                                    <router-link to="/user/orderList">我的订单</router-link>
-                                </li>
-                                <li class="item">
-                                    <router-link to="/user/information">账户资料</router-link>
-                                </li>
-                                <li class="item">
-                                    <router-link to="/user/addressList">收货地址</router-link>
-                                </li>
-                                <li class="item">
-                                    <router-link to="/user/coupon">我的优惠</router-link>
-                                </li>
-                                <li class="item">
-                                    <router-link to="/user/support">售后服务</router-link>
-                                </li>
-                                <li class="item">
-                                    <router-link to="/user/replace">以旧换新</router-link>
+                                <li class="item" v-for="(item, index) in navItems" :key="index">
+                                    <router-link :to="item.url">{{ item.title }}</router-link>
                                 </li>
                             </ul>
                         </div>
                     </router-link>
                     <router-link to="/cart" class="cart">
                         <span class="iconfont icon-cart"></span>
-                        <span class="iconnum" id="bage">{{ $store.getters.getAllCount }}</span>
+                        <span class="iconnum" id="bage" :class="{ empty: $store.getters.getAllCount === 0 }">{{ $store.getters.getAllCount }}</span>
 
                         <!-- 购物车卡 -->
-
                         <div class="car-card">
                             <div v-show="$store.getters.getAllCount != 0">
                                 <ul class="card-content">
@@ -78,7 +72,7 @@
                                     <router-link to="/cart" class="goTo-car-btn">去购物车</router-link>
                                 </div>
                             </div>
-                            <div v-show="$store.getters.getAllCount == 0" class="empty-cart">
+                            <div v-show="$store.getters.getAllCount === 0" class="empty-cart">
                                 <img src="static/images/cart-empty-new.png" alt="">
                                 <p>您的购物车竟然是空的</p>
                             </div>
@@ -102,27 +96,41 @@
 
 <script>
     export default {
-        data: function () {
+        data: function() {
             return {
                 keywords: '',
-                userCardFlag: false
+                userCardFlag: false,
+                navItems: [
+                    { url: "/user/orderList", title: "我的订单" },
+                    { url: "/user/information", title: "账户资料" },
+                    { url: "/user/addressList", title: "收货地址" },
+                    { url: "/user/coupon", title: "我的优惠" },
+                    { url: "/user/support", title: "售后服务" },
+                    { url: "/user/replace", title: "以旧换新" }
+                ]
             }
         },
-        created () {
+        created() {
             this.windowScroll();
         },
-        mounted() {
-            // this.setkeywords();
+        watch: {
+            keywords: function (newValue, oldValue) {
+
+                // 保存至仓库中
+                this.$store.commit ('getSearchKeywords', newValue);
+            }
         },
         methods: {
+
             // 导航栏吸顶事件
-
-            // 当屏幕滚动时触发
-
             windowScroll() {
+
+                // 当屏幕滚动时触发
                 window.addEventListener('scroll', function (e) {
+
                     // 获取元素
                     var nav = document.querySelector('.nav');
+
                     // 计算滚动出去的距离 兼容性处理
                     var scrollY = document.body.scrollTop || document.documentElement.scrollTop;
                     var cart = document.querySelector('.cart-box');
@@ -141,31 +149,21 @@
                     }
                 })
             },
-            setkeywords() {
-                location.href = '/#/search?key=' + this.keywords;
-                // 保存至本地存储中
-                localStorage.setItem('keywords', this.keywords)
-                // 保存至仓库中
-                this.$store.commit('getSearchKeywords', this.keywords)
-            },
-
             showUserCard() {
                 this.userCardFlag = !this.userCardFlag;
             },
-
             hideUserCard() {
+
                 if (this.userCardFlag) {
                     this.userCardFlag = !this.userCardFlag;
                 }
             },
+
             // 删除购物车卡片里的商品
-            delGoods(id, i) {
+            delGoods (id, i) {
+
                 // 删除car中的商品信息
-                this.$store.commit('removeFormCar', id);
-            },
-            // 失去焦点时，重置搜索栏
-            resetInput () {
-                this.keywords = ''
+                this.$store.commit ('removeFormCar', id);
             }
         }
     }
@@ -254,6 +252,9 @@
                             line-height: 20px;
                             text-align: center;
                             color: #fff;
+                        }
+                        .empty {
+                            background: rgb(132,132,132) !important;
                         }
                         &:hover {
                             .car-card {
