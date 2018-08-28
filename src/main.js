@@ -2,7 +2,7 @@
 * @Author: yongze-chen
 * @Date:   2018-06-20 10:56:57
 * @Last Modified by:   liyue2018
-* @Last Modified time: 2018-07-19 10:53:04
+* @Last Modified time: 2018-08-10 17:59:07
 */
 
 import Vue from 'vue'
@@ -35,8 +35,6 @@ import router from './router/router.js'
 import app from './App.vue'
 
 // 使用 vuex
-import Vuex from 'vuex'
-Vue.use(Vuex)
 import store from './store/vuex.js'
 
 // 使用 vue-awesome-swiper 

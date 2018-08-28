@@ -141,35 +141,35 @@ const router = new VueRouter({
 
 // 全局路由守卫
 
-router.beforeEach ((to, from, next) => {
-    console.log ('navigation-guards');
-    const nextRoute = ['cart', 'checkout', 'user', 'order'];
-    // 是否登录
-    let isLogin = JSON.parse (localStorage.getItem('login') || '');
-    // 未登录状态；当路由到nextRoute指定页时，跳转至login
-    if (nextRoute.indexOf (to.name) >= 0) {
-        if (!isLogin) {
-            console.log ('未登录,请先登录');
-            var l = prompt ("未登录,请先登录");
-            if (l == true) {
-                router.push ({ name: 'login' });
-            } else {
-                router.push ({ name: 'home' });
-                console.log ('好吧，那就留在原地吧');
-            }
-        }
-    }
+// router.beforeEach ((to, from, next) => {
+//     console.log ('navigation-guards');
+//     const nextRoute = ['cart', 'checkout', 'user', 'order'];
+//     // 是否登录
+//     let isLogin = JSON.parse (localStorage.getItem('login') || '');
+//     // 未登录状态；当路由到nextRoute指定页时，跳转至login
+//     if (nextRoute.indexOf (to.name) >= 0) {
+//         if (!isLogin) {
+//             console.log ('未登录,请先登录');
+//             var l = prompt ("未登录,请先登录");
+//             if (l == true) {
+//                 router.push ({ name: 'login' });
+//             } else {
+//                 router.push ({ name: 'home' });
+//                 console.log ('好吧，那就留在原地吧');
+//             }
+//         }
+//     }
 
     // 已登录状态；当路由到login时，跳转至home 
 
-    if (to.name === 'login') {
-        if (isLogin) {
-            router.push ({ name: 'home' });
-        }
-    }
+    // if (to.name === 'login') {
+    //     if (isLogin) {
+    //         router.push ({ name: 'home' });
+    //     }
+    // }
 
     // 一定要调用该方法来 resolve 这个钩子。执行效果依赖 next 方法的调用参数。
-    next ();
-})
+    // next ();
+// })
 
 export default router;

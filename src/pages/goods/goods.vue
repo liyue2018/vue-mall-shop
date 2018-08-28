@@ -123,11 +123,11 @@ import product from '../components/product.vue';
 
                 this.$axios.get('/products').then(function (res) {
                     that.loading = false;
-                    console.log('success');
+                    // console.log('success');
                     that.showFlag = false;
                     that.goodsList = res.data.data;
                 }).catch(function (err) {
-                    console.log('error' + err);
+                    // console.log('error' + err);
                     that.showFlag = false;
                 })
             },

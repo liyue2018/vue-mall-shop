@@ -45,64 +45,27 @@
 <style lang="scss" rel="stylesheet/scss" scoped>
 
     input[type='button'] {
-        display: flex; 
-        width: 145px; 
+        width: 145px;
         height: 50px;
-        justify-content: center;
-        align-items: center; 
-        // line-height: 50px; 
-        // text-align: center;
         border: 1px solid #ddd;
         border-radius: 5px;
         margin-right: 10px;
-        background: #fff;
-        // &:first-child {
-        //     background: #678ee7;
-        //     background-image: linear-gradient(180deg,#678ee7,#5078df);
-        //     border: 1px solid #5c81e3; 
-        //     color: #fff;
-        //     opacity: 0.94;
-        //     &:hover {
-        //         opacity: 1;
-        //     }
-        // }
-        // &:last-child {
-        //     border: 1px solid #e1e1e1;
-        //     color: #646464;
-        //     background: #f9f9f9;
-        //     background-image: linear-gradient(180deg,#fff,#f9f9f9);
-        //     opacity: 0.9;
-        //     &:hover {
-        //         opacity: 1;
-        //     }
-        // }
-
     }
 
     // 灰色按钮
     .gray-btn {
-        display: flex;
         width: 140px !important;
-        height: 30px !important;
-        transform: translateX(40%);
-        position: absolute; 
-        bottom: 70px; 
+        height: 34px !important;
+        transform: translateX(54%);
+        position: absolute;
+        bottom: 70px;
+        left: 0;
         transition: all 0.5s ease;
         opacity: 0;
     }
 
     // 默认按钮
     .default-btn {
-        // @include color(#e1e1e1, #646464, #f9f9f9);
-        // @extend %style;
-        // background: #678ee7;
-        // background-image: -webkit-linear-gradient(top, $cf, #f9f9f9);
-        // background-image: linear-gradient(180deg,#678ee7,#5078df);
-        // &:hover {
-        //   background-color: #eee;
-          // background-image: -webkit-linear-gradient(top, #f5f5f5, #eee);
-          // background-image: linear-gradient(180deg, #f5f5f5, #eee);
-        // }
         border: 1px solid #e1e1e1;
         color: #646464;
         background: #c2c3c2;
@@ -117,25 +80,19 @@
 
     // 主色按钮
     .main-btn {
-        // @include color(#5c81e3, #fff, #678ee7);
         color: #fff;
         background: #5c81e3;
         background-image: -webkit-linear-gradient(top, #678ee7, #5078df);
         background-image: linear-gradient(180deg, #678ee7, #5078df);
-        // @extend %style;
         &:hover {
           background-color: #6c8cd4;
-          // background-image: -webkit-linear-gradient(top, #6c8cd4, #4769c2);
           background-image: linear-gradient(180deg, #6c8cd4, #4769c2);
         }
-    }    
+    }
 
     // 禁用
     .disabled-btn {
         cursor: not-allowed;
-        // @include color(#afafaf, $cf, #a9a9a9);
-        // @extend %style;
-        // background-image: -webkit-linear-gradient(top, #b8b8b8, #a9a9a9);
         background-image: linear-gradient(180deg, #b8b8b8, #a9a9a9);
     }
 </style>

@@ -7,12 +7,6 @@
             </div>
             <div class="search-box fr">
                 <div class="search-form">
-                    <!-- <label>
-                        <input type="text" name="search" value="" placeholder="请输入商品信息" v-model="keywords" @keyup.enter="setkeywords" @blur="resetInput" />
-                    </label>
-                    <router-link :to="{ path:'/search',query:{key: keywords}}">
-                        <span class="iconfont icon-search"></span>
-                    </router-link> -->
                     <label>
                         <input type="text" name="search" value="" placeholder="请输入商品信息" v-model="keywords" />
                     </label>
@@ -28,6 +22,7 @@
                 <div class="cart-box">
                     <router-link to="/login" class="user" @mouseenter.native="showUserCard" @mouseleave.native="hideUserCard">
                         <span class="iconfont icon-account"></span>
+
                         <!-- 个人资料卡 -->
                         <div class="user-card" v-show="userCardFlag">
                             <div class="user-info">
@@ -98,9 +93,9 @@
     export default {
         data: function() {
             return {
-                keywords: '',
-                userCardFlag: false,
-                navItems: [
+                keywords: '', // 搜索关键词
+                userCardFlag: false, // 个人资料卡
+                navItems: [ // 个人账户子菜单
                     { url: "/user/orderList", title: "我的订单" },
                     { url: "/user/information", title: "账户资料" },
                     { url: "/user/addressList", title: "收货地址" },

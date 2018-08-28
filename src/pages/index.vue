@@ -4,8 +4,8 @@
         <transition mode="out-in" tag="div">
             <router-view></router-view>
         </transition>
-        
         <mall-footer></mall-footer>
+        <go-top></go-top>
     </div>
 </template>
 
@@ -13,14 +13,16 @@
 
 import mallHeader from './common/header.vue';
 import mallFooter from './common/footer.vue';
+import GoTop from './components/goTop.vue';
 
 export default {
     data: function() {
         return {}
     },
     components: {
-        'mallHeader': mallHeader,
-        'mallFooter': mallFooter,
+        mallHeader,
+        mallFooter,
+        GoTop
     }
 }
 </script>

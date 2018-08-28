@@ -37,7 +37,7 @@ import YButton from "../components/button.vue"
             getProductData (id) {
                 this.product.forEach(item => {
 
-                    if (item.id == id) {
+                    if (item.id === id) {
                         this.productItem = item;
                         return true;
                     }
